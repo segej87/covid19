@@ -1,0 +1,23 @@
+packages:
+   - shiny
+   - shinythemes
+   - plotly
+   - tidyverse
+   - sf
+   - lubridate
+   - DT
+   - progress
+   - httr
+   - shinyWidgets
+   - curl
+   - RCurl
+   - rjson
+   - rsdmx
+
+oecd_dbs:
+    - BLI
+    - HEALTH_PROT
+    - EDU_DEM
+
+wb_dbs:
+    - SM.POP.NETM

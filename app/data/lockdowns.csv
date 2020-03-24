@@ -1,0 +1,6 @@
+Country.Region,Province.State,Lockdown.Date
+China,Hubei,2020-01-23
+US,"San Francisco County, CA",2020-03-16
+Italy,,2020-03-09
+US,California,2020-03-20
+US,New York,2020-03-23
