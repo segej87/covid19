@@ -190,3 +190,53 @@ assign(
            Province.State = factor(Province.State)),
   envir = .GlobalEnv
 )
+
+
+# Groupings for plots -----------------------------------------------------
+
+assign(
+  'state_prov_grouped',
+  dat_summ %>%
+    group_by(load_date, Country.Region, Province.State) %>%
+    summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
+              Deaths = sum(Deaths, na.rm = TRUE),
+              Recovered = sum(Recovered, na.rm = TRUE)) %>%
+    group_by(Country.Region, Province.State) %>%
+    mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
+           Deaths_rate = Deaths - lag(Deaths, default = 0),
+           Recovered_rate = Recovered - lag(Recovered, default = 0),
+           Confirmed_accel = Confirmed_rate - lag(Confirmed_rate, default = 0),
+           Deaths_accel = Deaths_rate - lag(Deaths_rate, default = 0),
+           Recovered_accel = Recovered_rate - lag(Recovered_rate, default = 0)) %>%
+    left_join(dat_summ %>%
+                group_by(load_date, Country.Region, Province.State) %>%
+                summarise(Confirmed = sum(Confirmed, na.rm = TRUE)) %>%
+                filter(Confirmed >= 100) %>%
+                group_by(Country.Region, Province.State) %>%
+                summarise(First100Date = min(load_date, na.rm = TRUE)),
+              by = c('Country.Region', 'Province.State')) %>%
+    left_join(oecd_pops, by = c('Country.Region', 'Province.State')) %>%
+    replace_na(list(Population = 1)) %>%
+    mutate(normalized_date = as.numeric(difftime(load_date, First100Date, unit = 'days'))),
+  envir = .GlobalEnv
+)
+
+assign(
+  'map_data',
+  dat %>%
+    mutate(ind = apply(dat, MARGIN = 1, FUN = function(x) {paste(x[c('Latitude', 'Longitude')], collapse = '.')})) %>%
+    filter(!(Latitude == 0 & Longitude == 0),
+           !(is.na(Latitude) | is.na(Longitude))) %>%
+    st_as_sf(coords = c('Longitude', 'Latitude'), crs = st_crs(world_base)) %>%
+    group_by(ind, Country.Region, Province.State)  %>%
+    mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
+           Deaths_rate = Deaths - lag(Deaths, default = 0),
+           Recovered_rate = Recovered - lag(Recovered, default = 0),
+           Confirmed_accel = Confirmed_rate - lag(Confirmed_rate, default = 0),
+           Deaths_accel = Deaths_rate - lag(Deaths_rate, default = 0),
+           Recovered_accel = Recovered_rate - lag(Recovered_rate, default = 0)) %>%
+    left_join(oecd_pops, by = c('Country.Region', 'Province.State')) %>%
+    replace_na(list(Population = 1)) %>%
+    filter(load_date == max(load_date, na.rm = TRUE)),
+  envir = .GlobalEnv
+)

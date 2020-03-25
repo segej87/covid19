@@ -1,32 +1,9 @@
-get_summary_dat <- function(countries, state_province, break_out_states, group_world) {
+get_summary_dat <- function(countries, state_province, break_out_states, break_out_countries) {
   if (length(countries) == 1 & break_out_states) {
     plot_dat <- suppressWarnings(
-      dat_summ %>%
+      state_prov_grouped %>%
         filter(Country.Region %in% countries,
-               Province.State %in% state_province) %>%
-        group_by(load_date, Province.State) %>%
-        summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
-                  Deaths = sum(Deaths, na.rm = TRUE),
-                  Recovered = sum(Recovered, na.rm = TRUE)) %>%
-        group_by(Province.State) %>%
-        mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
-               Deaths_rate = Deaths - lag(Deaths, default = 0),
-               Recovered_rate = Recovered - lag(Recovered, default = 0),
-               Confirmed_accel = Confirmed_rate - lag(Confirmed_rate, default = 0),
-               Deaths_accel = Deaths_rate - lag(Deaths_rate, default = 0),
-               Recovered_accel = Recovered_rate - lag(Recovered_rate, default = 0)) %>%
-        left_join(dat_summ %>%
-                    filter(Country.Region %in% countries,
-                           Province.State %in% state_province) %>%
-                    group_by(load_date, Province.State) %>%
-                    summarise(Confirmed = sum(Confirmed, na.rm = TRUE)) %>%
-                    filter(Confirmed >= 100) %>%
-                    group_by(Province.State) %>%
-                    summarise(First100Date = min(load_date, na.rm = TRUE)),
-                  by = 'Province.State') %>%
-        left_join(oecd_pops, by = 'Province.State') %>%
-        replace_na(list(Population = 1)) %>%
-        mutate(normalized_date = as.numeric(difftime(load_date, First100Date, unit = 'days')))
+               Province.State %in% state_province)
     )
   } else {
     plot_dat <- suppressWarnings(
@@ -59,7 +36,7 @@ get_summary_dat <- function(countries, state_province, break_out_states, group_w
     )
   }
   
-  if (!group_world) {
+  if (!break_out_countries) {
     plot_dat <- plot_dat %>%
       group_by(load_date) %>%
       arrange(load_date) %>%
@@ -89,10 +66,10 @@ get_summary_dat <- function(countries, state_province, break_out_states, group_w
   return(plot_dat)
 }
 
-plot_line <- function(countries, state_province, metric, break_out_states = FALSE, show_lockdowns = FALSE, normalize_dates = FALSE, normalize_pops = FALSE, group_world = TRUE, type = 'Count') {
-  plot_dat <- get_summary_dat(countries, state_province, break_out_states, group_world)
+plot_line <- function(countries, state_province, metric, break_out_states = FALSE, show_lockdowns = FALSE, normalize_dates = FALSE, normalize_pops = FALSE, break_out_countries = TRUE, type = 'Count') {
+  plot_dat <- get_summary_dat(countries, state_province, break_out_states, break_out_countries)
   
-  if (length(countries) == 1 & break_out_states & group_world) {
+  if (length(countries) == 1 & break_out_states & break_out_countries) {
     colour = 'Province.State'
   } else {
     colour = 'Country.Region'
@@ -205,23 +182,9 @@ plot_line <- function(countries, state_province, metric, break_out_states = FALS
 
 plot_map <- function(countries, state_province, metric, break_out_states = FALSE, normalize_pops = FALSE, type = 'Count') {
   plot_dat <- suppressWarnings(
-    dat %>%
-      mutate(ind = apply(dat, MARGIN = 1, FUN = function(x) {paste(x[c('Latitude', 'Longitude')], collapse = '.')})) %>%
+    map_data %>%
       filter(Country.Region %in% countries,
-             Province.State %in% state_province,
-             !(Latitude == 0 & Longitude == 0),
-             !(is.na(Latitude) | is.na(Longitude))) %>%
-      st_as_sf(coords = c('Longitude', 'Latitude'), crs = st_crs(world_base)) %>%
-      group_by(ind, Country.Region, Province.State)  %>%
-      mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
-             Deaths_rate = Deaths - lag(Deaths, default = 0),
-             Recovered_rate = Recovered - lag(Recovered, default = 0),
-             Confirmed_accel = Confirmed_rate - lag(Confirmed_rate, default = 0),
-             Deaths_accel = Deaths_rate - lag(Deaths_rate, default = 0),
-             Recovered_accel = Recovered_rate - lag(Recovered_rate, default = 0)) %>%
-      left_join(oecd_pops, by = c('Country.Region', 'Province.State')) %>%
-      replace_na(list(Population = 1)) %>%
-      filter(load_date == max(load_date, na.rm = TRUE))
+             Province.State %in% state_province)
   )
   
   if (type == 'Rate') {
@@ -279,18 +242,18 @@ plot_map <- function(countries, state_province, metric, break_out_states = FALSE
 
 top_10_table <- function() {
   plot_dat <- dat %>%
-    group_by(load_date, Country.Region, Province.State) %>%
+    group_by(load_date, Country.Region) %>%
     summarise(Confirmed = sum(Confirmed),
               Deaths = sum(Deaths),
               Recovered = sum(Recovered)) %>%
-    group_by(Country.Region, Province.State) %>%
+    group_by(Country.Region) %>%
     mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
            Deaths_rate = Deaths - lag(Deaths, default = 0),
            Recovered_rate = Recovered - lag(Recovered, default = 0)) %>%
     filter(load_date == max(load_date)) %>%
     arrange(desc(load_date), desc(Confirmed_rate)) %>%
     rename(Last.Updated = load_date) %>%
-    select(Country.Region, Last.Updated, Province.State, Confirmed_rate, Deaths_rate, Recovered_rate, Confirmed, Deaths, Recovered)
+    select(Country.Region, Last.Updated, Confirmed_rate, Deaths_rate, Recovered_rate, Confirmed, Deaths, Recovered)
   
   num_cols <- names(sapply(data.frame(plot_dat), FUN = is.numeric)[which(sapply(data.frame(plot_dat), FUN = is.numeric))])
   bad_cols <- num_cols[which(!grepl('Recovered', num_cols))]
@@ -341,8 +304,8 @@ server <- function(input, output, session) {
     input$normalize_pops
   })
   
-  group_world <- reactive({
-    input$group_world
+  break_out_countries <- reactive({
+    input$break_out_countries
   })
   
   metric <- reactive({
@@ -408,7 +371,7 @@ server <- function(input, output, session) {
       show_lockdowns = show_lockdowns(),
       normalize_dates = normalize_dates(),
       normalize_pops = normalize_pops(),
-      group_world = group_world(),
+      break_out_countries = break_out_countries(),
       type = 'count'
     )
   })
@@ -421,7 +384,7 @@ server <- function(input, output, session) {
       break_out_states = break_out_states(),
       normalize_dates = normalize_dates(),
       normalize_pops = normalize_pops(),
-      group_world = group_world(),
+      break_out_countries = break_out_countries(),
       type = moment()
     )
   })

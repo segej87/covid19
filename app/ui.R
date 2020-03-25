@@ -41,7 +41,7 @@ ui <- navbarPage(
       ),
       
       checkboxInput(
-        inputId = 'group_world',
+        inputId = 'break_out_countries',
         label = 'Break Out Countries/Regions',
         value = FALSE
       ),
