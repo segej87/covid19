@@ -13,7 +13,8 @@ get_summary_dat <- function(countries, state_province, break_out_states, break_o
         group_by(load_date, Country.Region) %>%
         summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
                   Deaths = sum(Deaths, na.rm = TRUE),
-                  Recovered = sum(Recovered, na.rm = TRUE)) %>%
+                  Recovered = sum(Recovered, na.rm = TRUE),
+                  AggStatePop = sum(StatePopulation, na.rm = TRUE)) %>%
         group_by(Country.Region) %>%
         mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
                Deaths_rate = Deaths - lag(Deaths, default = 0),
@@ -31,6 +32,7 @@ get_summary_dat <- function(countries, state_province, break_out_states, break_o
                     summarise(First100Date = min(load_date, na.rm = TRUE)),
                   by = 'Country.Region') %>%
         left_join(country_populations, by = 'Country.Region') %>%
+        mutate(Population = ifelse(AggStatePop == 0, CountryPopulation, AggStatePop)) %>%
         replace_na(list(Population = 1)) %>%
         mutate(normalized_date = as.numeric(difftime(load_date, First100Date, unit = 'days')))
     )
@@ -211,6 +213,9 @@ plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, 
     '<br><b>Confirmed:</b> %{Confirmed}'
   )
   
+  xlim <- st_bbox(plot_dat)[c('xmin', 'xmax')]
+  ylim <- st_bbox(plot_dat)[c('ymin', 'ymax')]
+  
   map <- ggplot() +
     geom_sf(data = world_base,
             fill = '#2b3e50',
@@ -219,9 +224,10 @@ plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, 
     geom_sf(data = plot_dat,
             mapping = aes_string(size = metric,
                                  colour = metric,
-                                 text = 'Location'),
+                                 text = 'Location_name'),
             fill = 'none',
             alpha = 0.75) +
+    coord_sf(xlim = xlim, ylim = ylim) +
     scale_colour_distiller(palette = 'Spectral') +
     theme(panel.background = element_rect(fill = '#2b3e50'),
           plot.background = element_rect(fill = '#2b3e50'),
@@ -238,7 +244,7 @@ plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, 
           legend.text = element_text(color = 'white', face = 'bold'),
           legend.background = element_rect(fill = '#2b3e50'))
   
-  return(ggplotly(map, tooltip = append('size', 'Location')))
+  return(ggplotly(map, tooltip = append('size', 'Location_name')))
 }
 
 top_10_table <- function() {
@@ -361,10 +367,13 @@ server <- function(input, output, session) {
     if (length(x) == 0)
       x <- c()
     
-    if (length(x) == 1)
+    if (length(x) == 1) {
       shinyjs::enable('break_out_states')
-    else
+    }
+    else {
+      updateCheckboxInput(session = session, inputId = 'break_out_states', value = FALSE)
       shinyjs::disable('break_out_states')
+    }
     
     state_prov <- sort(unique(as.character((dat %>%
                                               filter(Country.Region %in% input$countries))$Province.State)))

@@ -1,53 +1,53 @@
-Country.Region,Province.State,Population,Density,Source
-US,California,39512223,253.5206882,US Census Bureau
-US,Texas,28995881,110.9834667,US Census Bureau
-US,Florida,21477737,400.3464277,US Census Bureau
-US,New York,19453561,412.8184286,US Census Bureau
-US,Pennsylvania,12801989,286.1310581,US Census Bureau
-US,Illinois,12671821,228.2646781,US Census Bureau
-US,Ohio,11689100,286.0855212,US Census Bureau
-US,Georgia,10617423,183.9587314,US Census Bureau
-US,North Carolina,10488084,215.7142042,US Census Bureau
-US,Michigan,9986857,176.4277398,US Census Bureau
-US,New Jersey,8882190,1207.672217,US Census Bureau
-US,Virginia,8535519,216.1867587,US Census Bureau
-US,Washington,7614893,114.5870085,US Census Bureau
-US,Arizona,7278717,64.04325175,US Census Bureau
-US,Massachusetts,6892503,883.5457036,US Census Bureau
-US,Tennessee,6829174,165.6040423,US Census Bureau
-US,Indiana,6732219,187.9120311,US Census Bureau
-US,Missouri,6137428,89.27757816,US Census Bureau
-US,Maryland,6045680,622.5512503,US Census Bureau
-US,Wisconsin,5822434,107.4895542,US Census Bureau
-US,Colorado,5758736,55.56614284,US Census Bureau
-US,Minnesota,5639632,70.82662351,US Census Bureau
-US,South Carolina,5148714,171.2600764,US Census Bureau
-US,Alabama,4903185,96.81165244,US Census Bureau
-US,Louisiana,4648794,107.5997929,US Census Bureau
-US,Kentucky,4467673,113.1303141,US Census Bureau
-US,Oregon,4217737,43.94025129,US Census Bureau
-US,Oklahoma,3956971,57.68520258,US Census Bureau
-US,Connecticut,3565287,736.2210464,US Census Bureau
-US,Utah,3205958,38.91817613,US Census Bureau
-US,Puerto Rico,3193694,,US Census Bureau
-US,Iowa,3155070,56.48808963,US Census Bureau
-US,Nevada,3080156,28.03700637,US Census Bureau
-US,Arkansas,3017804,57.99283631,US Census Bureau
-US,Mississippi,2976149,63.42279732,US Census Bureau
-US,Kansas,2913314,35.63317347,US Census Bureau
-US,New Mexico,2096829,17.2845621,US Census Bureau
-US,Nebraska,1934408,25.18219543,US Census Bureau
-US,West Virginia,1792147,74.54504806,US Census Bureau
-US,Idaho,1787065,21.62335489,US Census Bureau
-US,Hawaii,1415872,220.4575009,US Census Bureau
-US,New Hampshire,1359711,151.8653269,US Census Bureau
-US,Maine,1344212,43.57985941,US Census Bureau
-US,Montana,1068778,7.343145217,US Census Bureau
-US,Rhode Island,1059361,1024.626729,US Census Bureau
-US,Delaware,973764,499.7477588,US Census Bureau
-US,South Dakota,884659,11.66947081,US Census Bureau
-US,North Dakota,762062,11.04521346,US Census Bureau
-US,Alaska,731545,1.281126592,US Census Bureau
-US,District of Columbia,705749,11543.99994,US Census Bureau
-US,Vermont,623989,67.69333266,US Census Bureau
-US,Wyoming,578759,5.961136325,US Census Bureau
+Country.Region,Province.State,Population,Density,Source,Level
+US,California,39512223,253.5206882,US Census Bureau,Province.State
+US,Texas,28995881,110.9834667,US Census Bureau,Province.State
+US,Florida,21477737,400.3464277,US Census Bureau,Province.State
+US,New York,19453561,412.8184286,US Census Bureau,Province.State
+US,Pennsylvania,12801989,286.1310581,US Census Bureau,Province.State
+US,Illinois,12671821,228.2646781,US Census Bureau,Province.State
+US,Ohio,11689100,286.0855212,US Census Bureau,Province.State
+US,Georgia,10617423,183.9587314,US Census Bureau,Province.State
+US,North Carolina,10488084,215.7142042,US Census Bureau,Province.State
+US,Michigan,9986857,176.4277398,US Census Bureau,Province.State
+US,New Jersey,8882190,1207.672217,US Census Bureau,Province.State
+US,Virginia,8535519,216.1867587,US Census Bureau,Province.State
+US,Washington,7614893,114.5870085,US Census Bureau,Province.State
+US,Arizona,7278717,64.04325175,US Census Bureau,Province.State
+US,Massachusetts,6892503,883.5457036,US Census Bureau,Province.State
+US,Tennessee,6829174,165.6040423,US Census Bureau,Province.State
+US,Indiana,6732219,187.9120311,US Census Bureau,Province.State
+US,Missouri,6137428,89.27757816,US Census Bureau,Province.State
+US,Maryland,6045680,622.5512503,US Census Bureau,Province.State
+US,Wisconsin,5822434,107.4895542,US Census Bureau,Province.State
+US,Colorado,5758736,55.56614284,US Census Bureau,Province.State
+US,Minnesota,5639632,70.82662351,US Census Bureau,Province.State
+US,South Carolina,5148714,171.2600764,US Census Bureau,Province.State
+US,Alabama,4903185,96.81165244,US Census Bureau,Province.State
+US,Louisiana,4648794,107.5997929,US Census Bureau,Province.State
+US,Kentucky,4467673,113.1303141,US Census Bureau,Province.State
+US,Oregon,4217737,43.94025129,US Census Bureau,Province.State
+US,Oklahoma,3956971,57.68520258,US Census Bureau,Province.State
+US,Connecticut,3565287,736.2210464,US Census Bureau,Province.State
+US,Utah,3205958,38.91817613,US Census Bureau,Province.State
+US,Puerto Rico,3193694,,US Census Bureau,Province.State
+US,Iowa,3155070,56.48808963,US Census Bureau,Province.State
+US,Nevada,3080156,28.03700637,US Census Bureau,Province.State
+US,Arkansas,3017804,57.99283631,US Census Bureau,Province.State
+US,Mississippi,2976149,63.42279732,US Census Bureau,Province.State
+US,Kansas,2913314,35.63317347,US Census Bureau,Province.State
+US,New Mexico,2096829,17.2845621,US Census Bureau,Province.State
+US,Nebraska,1934408,25.18219543,US Census Bureau,Province.State
+US,West Virginia,1792147,74.54504806,US Census Bureau,Province.State
+US,Idaho,1787065,21.62335489,US Census Bureau,Province.State
+US,Hawaii,1415872,220.4575009,US Census Bureau,Province.State
+US,New Hampshire,1359711,151.8653269,US Census Bureau,Province.State
+US,Maine,1344212,43.57985941,US Census Bureau,Province.State
+US,Montana,1068778,7.343145217,US Census Bureau,Province.State
+US,Rhode Island,1059361,1024.626729,US Census Bureau,Province.State
+US,Delaware,973764,499.7477588,US Census Bureau,Province.State
+US,South Dakota,884659,11.66947081,US Census Bureau,Province.State
+US,North Dakota,762062,11.04521346,US Census Bureau,Province.State
+US,Alaska,731545,1.281126592,US Census Bureau,Province.State
+US,District of Columbia,705749,11543.99994,US Census Bureau,Province.State
+US,Vermont,623989,67.69333266,US Census Bureau,Province.State
+US,Wyoming,578759,5.961136325,US Census Bureau,Province.State

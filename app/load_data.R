@@ -146,6 +146,9 @@ load_data <- function() {
   }
 }
 
+abbrevs <- read.csv('data/state_abbrevs.csv', stringsAsFactors = F)
+abbrev_pattern <- paste0(abbrevs$Code, collapse = '|')
+
 assign(
   'dat',
   load_data() %>%
@@ -153,7 +156,23 @@ assign(
     mutate(Province.State = ifelse(Province.State == Country.Region,
                                    'None',
                                    Province.State)) %>%
+    # This section looks for sub-state entities that should be rolled up to the state level
+    mutate(AbbrevMatch = str_extract(Province.State, abbrev_pattern)) %>%
+    left_join(abbrevs, by = c('AbbrevMatch' = 'Code'), suffix = c('', '.y')) %>%
+    mutate(Location = Province.State,
+      Province.State = ifelse(!is.na(Province.State.y), Province.State.y, Location)) %>%
+    select(-AbbrevMatch, -Province.State.y, -Abbrev) %>%
+    # End of state cleanup section
     mutate_if(is.character, as.factor),
+  envir = .GlobalEnv
+)
+
+assign(
+  'populations',
+  read.csv('data/populations.csv') %>%
+    replace_na(list(Province.State = 'None')) %>%
+    mutate(Country.Region = factor(Country.Region),
+           Province.State = factor(Province.State)),
   envir = .GlobalEnv
 )
 
@@ -164,7 +183,9 @@ assign(
     summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
               Deaths = sum(Deaths, na.rm = TRUE),
               Recovered = sum(Recovered, na.rm = TRUE)) %>%
-    arrange(Country.Region, Province.State),
+    arrange(Country.Region, Province.State) %>%
+    left_join(populations, by = c('Country.Region', 'Province.State')) %>%
+    rename(StatePopulation = Population),
   envir = .GlobalEnv
 )
 
@@ -187,7 +208,8 @@ assign(
   read.csv('data/country_pops.csv') %>%
     replace_na(list(Province.State = 'None')) %>%
     mutate(Country.Region = factor(Country.Region),
-           Province.State = factor(Province.State)),
+           Province.State = factor(Province.State)) %>%
+    rename(CountryPopulation = Population),
   envir = .GlobalEnv
 )
 
@@ -224,7 +246,7 @@ assign(
                 group_by(Country.Region, Province.State) %>%
                 summarise(First100Date = min(load_date, na.rm = TRUE)),
               by = c('Country.Region', 'Province.State')) %>%
-    left_join(state_populations, by = c('Country.Region', 'Province.State')) %>%
+    left_join(populations, by = c('Country.Region', 'Province.State')) %>%
     replace_na(list(Population = 1)) %>%
     mutate(normalized_date = as.numeric(difftime(load_date, First100Date, unit = 'days'))),
   envir = .GlobalEnv
@@ -237,16 +259,16 @@ assign(
     filter(!(Latitude == 0 & Longitude == 0),
            !(is.na(Latitude) | is.na(Longitude))) %>%
     st_as_sf(coords = c('Longitude', 'Latitude'), crs = st_crs(world_base)) %>%
-    group_by(ind, Country.Region, Province.State)  %>%
+    group_by(ind, Country.Region, Location)  %>%
     mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
            Deaths_rate = Deaths - lag(Deaths, default = 0),
            Recovered_rate = Recovered - lag(Recovered, default = 0),
            Confirmed_accel = Confirmed_rate - lag(Confirmed_rate, default = 0),
            Deaths_accel = Deaths_rate - lag(Deaths_rate, default = 0),
            Recovered_accel = Recovered_rate - lag(Recovered_rate, default = 0)) %>%
-    left_join(state_populations, by = c('Country.Region', 'Province.State')) %>%
-    replace_na(list(Population = 1)) %>%
+    # left_join(populations, by = c('Country.Region', 'Province.State')) %>%
+    # replace_na(list(Population = 1)) %>%
     filter(load_date == max(load_date, na.rm = TRUE)) %>%
-    mutate(Location = ifelse(Province.State == 'None', Country.Region, Province.State)),
+    mutate(Location_name = ifelse(Location == 'None', as.character(Country.Region), as.character(Location))),
   envir = .GlobalEnv
 )
