@@ -180,7 +180,7 @@ plot_line <- function(countries, state_province, metric, break_out_states = FALS
            plot_bgcolor = NULL)
 }
 
-plot_map <- function(countries, state_province, metric, break_out_states = FALSE, normalize_pops = FALSE, type = 'Count') {
+plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, type = 'Count') {
   plot_dat <- suppressWarnings(
     map_data %>%
       filter(Country.Region %in% countries,
@@ -218,7 +218,8 @@ plot_map <- function(countries, state_province, metric, break_out_states = FALSE
             lwd = 0.2) +
     geom_sf(data = plot_dat,
             mapping = aes_string(size = metric,
-                                 colour = metric),
+                                 colour = metric,
+                                 text = 'Location'),
             fill = 'none',
             alpha = 0.75) +
     scale_colour_distiller(palette = 'Spectral') +
@@ -237,7 +238,7 @@ plot_map <- function(countries, state_province, metric, break_out_states = FALSE
           legend.text = element_text(color = 'white', face = 'bold'),
           legend.background = element_rect(fill = '#2b3e50'))
   
-  return(ggplotly(map, tooltip = c('Country.Region', 'Province.State', 'Confirmed')))
+  return(ggplotly(map, tooltip = append('size', 'Location')))
 }
 
 top_10_table <- function() {
@@ -276,43 +277,28 @@ top_10_table <- function() {
 }
 
 server <- function(input, output, session) {
-  countries <- reactive({
-    req(input$countries)
-    
-    input$countries
-  })
-  
-  state_province <- reactive({
-    req(input$state_province)
-    
-    input$state_province
-  })
-  
-  break_out_states <- reactive({
-    input$break_out_states
-  })
-  
-  show_lockdowns <- reactive({
-    input$show_lockdowns
-  })
-  
-  normalize_dates <- reactive({
-    input$normalize_dates
-  })
-  
-  normalize_pops <- reactive({
-    input$normalize_pops
-  })
-  
-  break_out_countries <- reactive({
-    input$break_out_countries
-  })
-  
-  metric <- reactive({
-    req(input$metric)
-    
-    input$metric
-  })
+  plot_vals <- eventReactive(
+    input$update,
+    {
+      var_list <- list(
+        countries = input$countries,
+        state_province =input$state_province,
+        metric = input$metric,
+        break_out_states = input$break_out_states,
+        show_lockdowns = input$show_lockdowns,
+        normalize_dates = input$normalize_dates,
+        normalize_pops = input$normalize_pops,
+        break_out_countries = input$break_out_countries
+      )
+      
+      assign('var_list', var_list, envir = .GlobalEnv)
+      
+      shinyjs::hide('update')
+      
+      return(var_list)
+    },
+    ignoreNULL = FALSE
+  )
   
   moment <- reactive({
     req(input$moment)
@@ -332,12 +318,53 @@ server <- function(input, output, session) {
     input$map_moment
   })
   
+  # UI observations
+  observe({
+    countries <- input$countries
+    state_province <- input$state_province
+    metric <- input$metric
+    break_out_states <- input$break_out_states
+    show_lockdowns <- input$show_lockdowns
+    normalize_dates <- input$normalize_dates
+    normalize_pops <- input$normalize_pops
+    break_out_countries <- input$break_out_countries
+    
+    if (exists('var_list')) {
+      list_match <- all.equal(list(countries = countries,
+                                   state_province = state_province,
+                                   metric = metric,
+                                   break_out_states = break_out_states,
+                                   show_lockdowns = show_lockdowns,
+                                   normalize_dates = normalize_dates,
+                                   normalize_pops = normalize_pops,
+                                   break_out_countries = break_out_countries),
+                              var_list)
+      
+      if (length(list_match) == 1) {
+        if (list_match == TRUE) {
+          shinyjs::hide('update')
+        } else {
+          shinyjs::show('update')
+        }
+      } else {
+        shinyjs::show('update')
+      }
+    }
+    
+    if (break_out_states) updateCheckboxInput(session = session, inputId = 'break_out_countries', value = TRUE)
+  })
+  
   observe({
     x <- input$countries
     
     # Can use character(0) to remove all choices
     if (length(x) == 0)
       x <- c()
+    
+    if (length(x) == 1)
+      shinyjs::enable('break_out_states')
+    else
+      shinyjs::disable('break_out_states')
     
     state_prov <- sort(unique(as.character((dat %>%
                                               filter(Country.Region %in% input$countries))$Province.State)))
@@ -363,41 +390,27 @@ server <- function(input, output, session) {
   })
   
   output$plot <- renderPlotly({
-    plot_line(
-      countries = countries(),
-      state_province = state_province(),
-      metric = metric(),
-      break_out_states = break_out_states(),
-      show_lockdowns = show_lockdowns(),
-      normalize_dates = normalize_dates(),
-      normalize_pops = normalize_pops(),
-      break_out_countries = break_out_countries(),
-      type = 'count'
-    )
+    withProgress(message = 'Rendering plot...', expr = {
+      do.call(plot_line, c(plot_vals(), type = 'count'))
+    })
   })
   
   output$plot_rates <- renderPlotly({
-    plot_line(
-      countries = countries(),
-      state_province = state_province(),
-      metric = metric(),
-      break_out_states = break_out_states(),
-      normalize_dates = normalize_dates(),
-      normalize_pops = normalize_pops(),
-      break_out_countries = break_out_countries(),
-      type = moment()
-    )
+    withProgress(message = 'Rendering plot...', expr = {
+      do.call(plot_line, c(plot_vals(), type = moment()))
+    })
   })
   
   output$plot_map <- renderPlotly({
-    plot_map(
-      countries = countries(),
-      state_province = state_province(),
-      metric = map_metric(),
-      type = map_moment(),
-      break_out_states = break_out_states()#,
-      # TODO: fix pop normalizing on map
-      # normalize_pops = normalize_pops()
-    )
+    map_vals <- plot_vals()[c('countries', 'state_province')]
+    
+    withProgress(message = 'Rendering map...', expr = {
+      do.call(plot_map, c(map_vals,
+                          metric = map_metric(),
+                          type = map_moment()#,
+                          # TODO: fix pop normalizing on map
+                          # normalize_pops = normalize_pops()
+      ))
+    })
   })
 }

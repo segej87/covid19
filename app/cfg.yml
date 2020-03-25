@@ -13,6 +13,8 @@ packages:
    - RCurl
    - rjson
    - rsdmx
+   - shinyjs
+   - cowplot
 
 oecd_dbs:
     - BLI

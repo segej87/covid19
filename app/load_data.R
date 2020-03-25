@@ -178,7 +178,7 @@ assign(
 assign(
   'lockdowns',
   read.csv('data/lockdowns.csv') %>%
-    mutate(Lockdown.Date = as.Date(Lockdown.Date)),
+    mutate(Lockdown.Date = as.Date(Lockdown.Date, format = '%m/%d/%Y')),
   envir = .GlobalEnv
 )
 
@@ -246,6 +246,7 @@ assign(
            Recovered_accel = Recovered_rate - lag(Recovered_rate, default = 0)) %>%
     left_join(state_populations, by = c('Country.Region', 'Province.State')) %>%
     replace_na(list(Population = 1)) %>%
-    filter(load_date == max(load_date, na.rm = TRUE)),
+    filter(load_date == max(load_date, na.rm = TRUE)) %>%
+    mutate(Location = ifelse(Province.State == 'None', Country.Region, Province.State)),
   envir = .GlobalEnv
 )

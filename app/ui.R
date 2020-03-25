@@ -9,6 +9,7 @@ for (p in packages) library(p, character.only = TRUE, quietly = TRUE, verbose = 
 source('load_data.R')
 
 ui <- navbarPage(
+  useShinyjs(),
   title = 'COVID-19 Summary Report',
   
   fluid = TRUE,
@@ -46,11 +47,12 @@ ui <- navbarPage(
         value = FALSE
       ),
       
+      disabled(
       checkboxInput(
         inputId = 'break_out_states',
         label = 'Break Out States/Provinces',
         value = FALSE
-      ),
+      )),
       
       checkboxInput(
         inputId = 'normalize_pops',
@@ -79,13 +81,20 @@ ui <- navbarPage(
         selectize = TRUE
       ),
       
+      hidden(
+      actionButton(
+        inputId = 'update',
+        label = 'Click to Update Plots',
+        style = 'color: #ffa500'
+      )),
+      
       htmlOutput(
         outputId = 'data_update'
       ),
       
       plotOutput(
         outputId = 'spacer',
-        height = '500px'
+        height = '400px'
       )
     ),
     
@@ -113,10 +122,7 @@ ui <- navbarPage(
             inputId = 'moment',
             label = NULL,
             choices = c('Rate', 'Acceleration'),
-            width = '150px',
-            options = list(
-              style = c("background: #2b3e50; color: #2b3e50;")
-            )
+            width = '150px'
           )
         )
       ),
@@ -133,20 +139,14 @@ ui <- navbarPage(
                 inputId = 'map_metric',
                 label = NULL,
                 choices = c('Confirmed', 'Deaths', 'Recovered'),
-                width = '150px',
-                options = list(
-                  style = c("background: #2b3e50; color: #2b3e50;")
-                )
+                width = '150px'
               ),
               
               pickerInput(
                 inputId = 'map_moment',
                 label = NULL,
                 choices = c('Count', 'Rate', 'Acceleration'),
-                width = '150px',
-                options = list(
-                  style = c("background: #2b3e50; color: #2b3e50;")
-                )
+                width = '150px'
               )
             ),
             
