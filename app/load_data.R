@@ -183,8 +183,17 @@ assign(
 )
 
 assign(
-  'oecd_pops',
-  read.csv('data/edu_dem.csv') %>%
+  'country_populations',
+  read.csv('data/country_pops.csv') %>%
+    replace_na(list(Province.State = 'None')) %>%
+    mutate(Country.Region = factor(Country.Region),
+           Province.State = factor(Province.State)),
+  envir = .GlobalEnv
+)
+
+assign(
+  'state_populations',
+  read.csv('data/state_pops.csv') %>%
     replace_na(list(Province.State = 'None')) %>%
     mutate(Country.Region = factor(Country.Region),
            Province.State = factor(Province.State)),
@@ -215,7 +224,7 @@ assign(
                 group_by(Country.Region, Province.State) %>%
                 summarise(First100Date = min(load_date, na.rm = TRUE)),
               by = c('Country.Region', 'Province.State')) %>%
-    left_join(oecd_pops, by = c('Country.Region', 'Province.State')) %>%
+    left_join(state_populations, by = c('Country.Region', 'Province.State')) %>%
     replace_na(list(Population = 1)) %>%
     mutate(normalized_date = as.numeric(difftime(load_date, First100Date, unit = 'days'))),
   envir = .GlobalEnv
@@ -235,7 +244,7 @@ assign(
            Confirmed_accel = Confirmed_rate - lag(Confirmed_rate, default = 0),
            Deaths_accel = Deaths_rate - lag(Deaths_rate, default = 0),
            Recovered_accel = Recovered_rate - lag(Recovered_rate, default = 0)) %>%
-    left_join(oecd_pops, by = c('Country.Region', 'Province.State')) %>%
+    left_join(state_populations, by = c('Country.Region', 'Province.State')) %>%
     replace_na(list(Population = 1)) %>%
     filter(load_date == max(load_date, na.rm = TRUE)),
   envir = .GlobalEnv

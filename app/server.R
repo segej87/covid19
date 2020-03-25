@@ -30,7 +30,7 @@ get_summary_dat <- function(countries, state_province, break_out_states, break_o
                     group_by(Country.Region) %>%
                     summarise(First100Date = min(load_date, na.rm = TRUE)),
                   by = 'Country.Region') %>%
-        left_join(oecd_pops, by = 'Country.Region') %>%
+        left_join(country_populations, by = 'Country.Region') %>%
         replace_na(list(Population = 1)) %>%
         mutate(normalized_date = as.numeric(difftime(load_date, First100Date, unit = 'days')))
     )
@@ -201,9 +201,9 @@ plot_map <- function(countries, state_province, metric, break_out_states = FALSE
   }
   
   # TODO: normalize by local population
-  if (normalize_pops) {
-    plot_dat[,metric] <- plot_dat[,metric]/plot_dat$Population
-  }
+  # if (normalize_pops) {
+  #   plot_dat[,metric] <- plot_dat[,metric]/plot_dat$Population
+  # }
   
   hovertemplate <- paste0(
     '<b>Country/Province:</b> %{Country.Region}',
@@ -395,8 +395,9 @@ server <- function(input, output, session) {
       state_province = state_province(),
       metric = map_metric(),
       type = map_moment(),
-      break_out_states = break_out_states(),
-      normalize_pops = normalize_pops()
+      break_out_states = break_out_states()#,
+      # TODO: fix pop normalizing on map
+      # normalize_pops = normalize_pops()
     )
   })
 }

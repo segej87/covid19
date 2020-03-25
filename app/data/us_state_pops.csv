@@ -1,0 +1,53 @@
+Country.Region,Province.State,Population,Density,DATE_DESC
+us,California,39512223,253.5206882,7/1/2019 population estimate
+us,Texas,28995881,110.9834667,7/1/2019 population estimate
+us,Florida,21477737,400.3464277,7/1/2019 population estimate
+us,New York,19453561,412.8184286,7/1/2019 population estimate
+us,Pennsylvania,12801989,286.1310581,7/1/2019 population estimate
+us,Illinois,12671821,228.2646781,7/1/2019 population estimate
+us,Ohio,11689100,286.0855212,7/1/2019 population estimate
+us,Georgia,10617423,183.9587314,7/1/2019 population estimate
+us,North Carolina,10488084,215.7142042,7/1/2019 population estimate
+us,Michigan,9986857,176.4277398,7/1/2019 population estimate
+us,New Jersey,8882190,1207.672217,7/1/2019 population estimate
+us,Virginia,8535519,216.1867587,7/1/2019 population estimate
+us,Washington,7614893,114.5870085,7/1/2019 population estimate
+us,Arizona,7278717,64.04325175,7/1/2019 population estimate
+us,Massachusetts,6892503,883.5457036,7/1/2019 population estimate
+us,Tennessee,6829174,165.6040423,7/1/2019 population estimate
+us,Indiana,6732219,187.9120311,7/1/2019 population estimate
+us,Missouri,6137428,89.27757816,7/1/2019 population estimate
+us,Maryland,6045680,622.5512503,7/1/2019 population estimate
+us,Wisconsin,5822434,107.4895542,7/1/2019 population estimate
+us,Colorado,5758736,55.56614284,7/1/2019 population estimate
+us,Minnesota,5639632,70.82662351,7/1/2019 population estimate
+us,South Carolina,5148714,171.2600764,7/1/2019 population estimate
+us,Alabama,4903185,96.81165244,7/1/2019 population estimate
+us,Louisiana,4648794,107.5997929,7/1/2019 population estimate
+us,Kentucky,4467673,113.1303141,7/1/2019 population estimate
+us,Oregon,4217737,43.94025129,7/1/2019 population estimate
+us,Oklahoma,3956971,57.68520258,7/1/2019 population estimate
+us,Connecticut,3565287,736.2210464,7/1/2019 population estimate
+us,Utah,3205958,38.91817613,7/1/2019 population estimate
+us,Puerto Rico,3193694,NA,7/1/2019 population estimate
+us,Iowa,3155070,56.48808963,7/1/2019 population estimate
+us,Nevada,3080156,28.03700637,7/1/2019 population estimate
+us,Arkansas,3017804,57.99283631,7/1/2019 population estimate
+us,Mississippi,2976149,63.42279732,7/1/2019 population estimate
+us,Kansas,2913314,35.63317347,7/1/2019 population estimate
+us,New Mexico,2096829,17.2845621,7/1/2019 population estimate
+us,Nebraska,1934408,25.18219543,7/1/2019 population estimate
+us,West Virginia,1792147,74.54504806,7/1/2019 population estimate
+us,Idaho,1787065,21.62335489,7/1/2019 population estimate
+us,Hawaii,1415872,220.4575009,7/1/2019 population estimate
+us,New Hampshire,1359711,151.8653269,7/1/2019 population estimate
+us,Maine,1344212,43.57985941,7/1/2019 population estimate
+us,Montana,1068778,7.343145217,7/1/2019 population estimate
+us,Rhode Island,1059361,1024.626729,7/1/2019 population estimate
+us,Delaware,973764,499.7477588,7/1/2019 population estimate
+us,South Dakota,884659,11.66947081,7/1/2019 population estimate
+us,North Dakota,762062,11.04521346,7/1/2019 population estimate
+us,Alaska,731545,1.281126592,7/1/2019 population estimate
+us,District of Columbia,705749,11543.99994,7/1/2019 population estimate
+us,Vermont,623989,67.69333266,7/1/2019 population estimate
+us,Wyoming,578759,5.961136325,7/1/2019 population estimate
