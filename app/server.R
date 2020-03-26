@@ -33,7 +33,6 @@ get_summary_dat <- function(countries, state_province, break_out_states, break_o
                   by = 'Country.Region') %>%
         left_join(country_populations, by = 'Country.Region') %>%
         mutate(Population = ifelse(AggStatePop == 0, CountryPopulation, AggStatePop)) %>%
-        replace_na(list(Population = 1)) %>%
         mutate(normalized_date = as.numeric(difftime(load_date, First100Date, unit = 'days')))
     )
   }
@@ -45,7 +44,7 @@ get_summary_dat <- function(countries, state_province, break_out_states, break_o
       summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
                 Deaths = sum(Deaths, na.rm = TRUE),
                 Recovered = sum(Recovered, na.rm = TRUE),
-                Population = sum(Population)) %>%
+                Population = sum(Population, na.rm = TRUE)) %>%
       mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
              Deaths_rate = Deaths - lag(Deaths, default = 0),
              Recovered_rate = Recovered - lag(Recovered, default = 0),
@@ -251,9 +250,9 @@ plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, 
 top_10_table <- function() {
   plot_dat <- dat %>%
     group_by(load_date, Country.Region) %>%
-    summarise(Confirmed = sum(Confirmed),
-              Deaths = sum(Deaths),
-              Recovered = sum(Recovered)) %>%
+    summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
+              Deaths = sum(Deaths, na.rm = TRUE),
+              Recovered = sum(Recovered, na.rm = TRUE)) %>%
     group_by(Country.Region) %>%
     mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
            Deaths_rate = Deaths - lag(Deaths, default = 0),
@@ -382,13 +381,12 @@ server <- function(input, output, session) {
       shinyjs::disable('break_out_states')
     }
     
-    state_prov <- sort(unique(as.character((dat %>%
-                                              filter(Country.Region %in% input$countries))$Province.State)))
+    state_prov <- state_prov_list[x]
     
     # Can also set the label and select items
     updatePickerInput(session, 'state_province',
                       choices = state_prov,
-                      selected = state_prov
+                      selected = unlist(state_prov)
     )
   })
   

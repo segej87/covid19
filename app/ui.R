@@ -33,8 +33,8 @@ ui <- navbarPage(
         inputId = 'state_province',
         label = 'State/Province',
         multiple = TRUE,
-        choices = sort(unique(as.character(dat$Province.State))),
-        selected = sort(unique(as.character(dat$Province.State))),
+        choices = state_prov_list,
+        selected = unlist(state_prov_list),
         options = list(
           'live-search' = TRUE,
           'actions-box' = TRUE
