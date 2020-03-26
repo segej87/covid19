@@ -6,6 +6,7 @@ urlfile='https://api.github.com/repos/CSSEGISandData/COVID-19/git/trees/master?r
 
 github_token <- function() {
   token <- Sys.getenv('GITHUB_TOKEN')
+  
   if (identical(token, '')) {
     warning('No oAuth token found, going unauthenticated')
   }
@@ -18,9 +19,10 @@ load_data <- function() {
     token <- github_token()
     GET(urlfile, add_headers(Authorization = paste('Bearer', token, sep = ' ')))
   }, warning = function(w) {
-    cat(w)
+    cat(w$message)
     GET(urlfile)
   }, error = function(e) {
+    cat(e$message)
     'override'
   })
   
@@ -38,7 +40,7 @@ load_data <- function() {
       
       return(dat)
     }
-  } else if (req$status_code == 403) {
+  } else if (req$status_code != 200) {
     warning(paste('Loading most recent data - ', fromJSON(rawToChar(req$content))))
     
     files <- list.files('data', pattern = '.RData')
