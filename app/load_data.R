@@ -4,8 +4,21 @@ library(curl)
 
 urlfile='https://api.github.com/repos/CSSEGISandData/COVID-19/git/trees/master?recursive=1'
 
+github_token <- function() {
+  token <- Sys.getenv('GITHUB_TOKEN')
+  if (identical(token, '')) {
+    warning('No oAuth token found, going unauthenticated')
+  }
+  
+  return(token)
+}
+
 load_data <- function() {
   req <- tryCatch({
+    token <- github_token()
+    GET(urlfile, add_headers(Authorization = paste('Bearer', token, sep = ' ')))
+  }, warning = function(w) {
+    cat(w)
     GET(urlfile)
   }, error = function(e) {
     'override'
@@ -25,6 +38,18 @@ load_data <- function() {
       
       return(dat)
     }
+  } else if (req$status_code == 403) {
+    warning(paste('Loading most recent data - ', fromJSON(rawToChar(req$content))))
+    
+    files <- list.files('data', pattern = '.RData')
+    files_as_dates <- as.Date(gsub('.Rdata', '', files), format = '%m-%d-%Y')
+    
+    assign('max_data_date', max(files_as_dates), envir = .GlobalEnv)
+    assign('connected', FALSE, envir = .GlobalEnv)
+    
+    load(file.path('data', files[which(files_as_dates == max(files_as_dates))]))
+    
+    return(dat)
   }
   
   stop_for_status(req)

@@ -186,7 +186,7 @@ plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, 
     map_data %>%
       filter(Country.Region %in% countries,
              Province.State %in% state_province,
-             Confirmed + Deaths + Recovered > total_limit)
+             Confirmed > total_limit)
   )
   
   if (type == 'Rate') {
