@@ -268,7 +268,6 @@ assign(
     # left_join(populations, by = c('Country.Region', 'Province.State')) %>%
     # replace_na(list(Population = 1)) %>%
     filter(load_date == max(load_date, na.rm = TRUE)) %>%
-    filter(Confirmed + Deaths + Recovered > 0) %>%
     mutate(Location_name = ifelse(Location == 'None', as.character(Country.Region), as.character(Location))),
   envir = .GlobalEnv
 )

@@ -147,6 +147,13 @@ ui <- navbarPage(
                 label = NULL,
                 choices = c('Count', 'Rate', 'Acceleration'),
                 width = '150px'
+              ),
+              
+              numericInput(
+                inputId = 'total_limit',
+                label = 'Min. # Cases to Show',
+                width = '150px',
+                value = 100
               )
             ),
             

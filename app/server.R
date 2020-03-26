@@ -182,11 +182,12 @@ plot_line <- function(countries, state_province, metric, break_out_states = FALS
            plot_bgcolor = NULL)
 }
 
-plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, type = 'Count') {
+plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, type = 'Count', total_limit = 100) {
   plot_dat <- suppressWarnings(
     map_data %>%
       filter(Country.Region %in% countries,
-             Province.State %in% state_province)
+             Province.State %in% state_province,
+             Confirmed + Deaths + Recovered > total_limit)
   )
   
   if (type == 'Rate') {
@@ -324,6 +325,12 @@ server <- function(input, output, session) {
     input$map_moment
   })
   
+  total_limit <- reactive({
+    req(input$total_limit)
+    
+    input$total_limit
+  })
+  
   # UI observations
   observe({
     countries <- input$countries
@@ -416,7 +423,8 @@ server <- function(input, output, session) {
     withProgress(message = 'Rendering map...', expr = {
       do.call(plot_map, c(map_vals,
                           metric = map_metric(),
-                          type = map_moment()#,
+                          type = map_moment(),
+                          total_limit = total_limit()#,
                           # TODO: fix pop normalizing on map
                           # normalize_pops = normalize_pops()
       ))
