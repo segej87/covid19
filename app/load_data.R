@@ -50,35 +50,36 @@ load_data <- function() {
   assign('max_data_date', max_date, envir = .GlobalEnv)
   assign('connected', TRUE, envir = .GlobalEnv)
   
-  # Define column specifications
-  col_specs <- cols(
-    FIPS = col_integer(),
-    Admin2 = col_character(),
-    `Province/State` = col_character(),
-    `Country/Region` = col_character(),
-    `Last Update` = col_datetime(format = ""),
-    Confirmed = col_double(),
-    Deaths = col_double(),
-    Recovered = col_double(),
-    Active = col_double(),
-    Latitude = col_double(),
-    Longitude = col_double(),
-    Combined_Key = col_character()
-  )
-  
-  col_specs2 <- cols(
-    FIPS = col_integer(),
-    Admin2 = col_character(),
-    Province_State = col_character(),
-    Country_Region = col_character(),
-    Last_Update = col_datetime(format = ""),
-    Confirmed = col_double(),
-    Deaths = col_double(),
-    Recovered = col_double(),
-    Active = col_double(),
-    Lat = col_double(),
-    Long_ = col_double(),
-    Combined_Key = col_character()
+  # Col specification sets
+  col_specs <- list(
+    Set_1 = cols(
+      FIPS = col_integer(),
+      Admin2 = col_character(),
+      `Province/State` = col_character(),
+      `Country/Region` = col_character(),
+      `Last Update` = col_datetime(format = ""),
+      Confirmed = col_double(),
+      Deaths = col_double(),
+      Recovered = col_double(),
+      Active = col_double(),
+      Latitude = col_double(),
+      Longitude = col_double(),
+      Combined_Key = col_character()
+    ),
+    Set_2 = cols(
+      FIPS = col_integer(),
+      Admin2 = col_character(),
+      Province_State = col_character(),
+      Country_Region = col_character(),
+      Last_Update = col_datetime(format = ""),
+      Confirmed = col_double(),
+      Deaths = col_double(),
+      Recovered = col_double(),
+      Active = col_double(),
+      Lat = col_double(),
+      Long_ = col_double(),
+      Combined_Key = col_character()
+    )
   )
   
   col_names <- names(col_specs$cols)
@@ -96,35 +97,32 @@ load_data <- function() {
   } else {
     cat('Newer data detected - downloading')
     
-    dat <- tibble()
+    dat <- c()
     pb <- progress_bar$new(total = length(data_files))
     for (d in data_files) {
-      csv_data <-tryCatch({
-        readr::read_csv(url(file.path(path, d)), col_types = col_specs, progress = TRUE)
+      csv_data <- tryCatch({
+        readr::read_csv(url(file.path(path, d)), col_types = col_specs[[1]], progress = TRUE)
       }, warning = function(w) {
-        tryCatch({
-          readr::read_csv(url(file.path(path, d)), col_types = col_specs2, progress = TRUE)
-        }, warning = function(w) {
-          tmp <- suppressWarnings(readr::read_csv(url(file.path(path, d)),
-                                                  col_types = col_specs, progress = TRUE))
-          
-          rep_names <-setdiff(col_names, names(tmp))
-          
-          tmp[rep_names] <- NA
-          
-          tmp
-        })
-      }, error = function(e) {
-        if (grepl('unique', e)) {
-          cat(e)
+        if (grepl('don\'t match the column names', w)) {
+          tryCatch({
+            readr::read_csv(url(file.path(path, d)), col_types = col_specs[[2]], progress = TRUE)
+          })
         }
       }) %>%
-        rename_all(gsub, pattern = "[^[:alnum:]]", replacement = '.') %>%
         rename_all(gsub, pattern = 'Lat$', replacement = 'Latitude') %>%
-        rename_all(gsub, pattern = 'Long_$', replacement = 'Longitude')
+        rename_all(gsub, pattern = 'Long[_.]$', replacement = 'Longitude') %>%
+        rename_all(gsub, pattern = "[^[:alnum:]]", replacement = '.')
       
+      if (length(class(csv_data$Last.Update)) == 1) {
+        if (class(csv_data$Last.Update) == 'character') {
+          tryCatch({
+            csv_data <- csv_data %>% mutate(Last.Update = as.POSIXct(Last.Update, format = '%m/%d/%Y %H:%M'))
+          })
+        }
+      }
+
       date = as.Date(basename(gsub('[.][[:alnum:]]+$', '', d)), '%m-%d-%Y')
-      
+
       dat <- dat %>%
         bind_rows(csv_data %>%
                     mutate(load_date = date))
@@ -259,7 +257,8 @@ assign(
     filter(!(Latitude == 0 & Longitude == 0),
            !(is.na(Latitude) | is.na(Longitude))) %>%
     st_as_sf(coords = c('Longitude', 'Latitude'), crs = st_crs(world_base)) %>%
-    group_by(ind, Country.Region, Location)  %>%
+    mutate(CombinedLocation = paste(Admin2, Location, sep = ', ')) %>%
+    group_by(ind, Country.Region, CombinedLocation)  %>%
     mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
            Deaths_rate = Deaths - lag(Deaths, default = 0),
            Recovered_rate = Recovered - lag(Recovered, default = 0),
@@ -269,6 +268,7 @@ assign(
     # left_join(populations, by = c('Country.Region', 'Province.State')) %>%
     # replace_na(list(Population = 1)) %>%
     filter(load_date == max(load_date, na.rm = TRUE)) %>%
+    filter(Confirmed + Deaths + Recovered > 0) %>%
     mutate(Location_name = ifelse(Location == 'None', as.character(Country.Region), as.character(Location))),
   envir = .GlobalEnv
 )

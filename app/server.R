@@ -224,7 +224,7 @@ plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, 
     geom_sf(data = plot_dat,
             mapping = aes_string(size = metric,
                                  colour = metric,
-                                 text = 'Location_name'),
+                                 text = 'CombinedLocation'),
             fill = 'none',
             alpha = 0.75) +
     coord_sf(xlim = xlim, ylim = ylim) +
@@ -244,7 +244,7 @@ plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, 
           legend.text = element_text(color = 'white', face = 'bold'),
           legend.background = element_rect(fill = '#2b3e50'))
   
-  return(ggplotly(map, tooltip = append('size', 'Location_name')))
+  return(ggplotly(map, tooltip = append('size', 'CombinedLocation')))
 }
 
 top_10_table <- function() {
