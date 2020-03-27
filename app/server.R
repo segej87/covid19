@@ -33,7 +33,8 @@ get_summary_dat <- function(countries, state_province, break_out_states, break_o
                   by = 'Country.Region') %>%
         left_join(country_populations, by = 'Country.Region') %>%
         mutate(Population = ifelse(AggStatePop == 0, CountryPopulation, AggStatePop)) %>%
-        mutate(normalized_date = as.numeric(difftime(load_date, First100Date, unit = 'days')))
+        mutate(normalized_date = as.numeric(difftime(load_date, First100Date, unit = 'days')),
+               date_lag = difftime(load_date, lag(load_date), units = 'days'))
     )
   }
   
@@ -61,14 +62,16 @@ get_summary_dat <- function(countries, state_province, break_out_states, break_o
                   summarise(First100Date = min(load_date, na.rm = TRUE)) %>%
                   mutate(Country.Region = 'World'),
                 by = 'Country.Region') %>%
-      mutate(normalized_date = as.numeric(difftime(load_date, First100Date, unit = 'days')))
+      mutate(normalized_date = as.numeric(difftime(load_date, First100Date, unit = 'days')),
+             date_lag = difftime(load_date, lag(load_date), units = 'days'))
   }
   
   return(plot_dat)
 }
 
 plot_line <- function(countries, state_province, metric, break_out_states = FALSE, show_lockdowns = FALSE, normalize_dates = FALSE, normalize_pops = FALSE, break_out_countries = TRUE, type = 'Count') {
-  plot_dat <- get_summary_dat(countries, state_province, break_out_states, break_out_countries)
+  plot_dat <- get_summary_dat(countries, state_province, break_out_states, break_out_countries) %>%
+    if (type != 'Count') filter(., date_lag == 1) else .
   
   if (length(countries) == 1 & break_out_states & break_out_countries) {
     colour = 'Province.State'
@@ -186,7 +189,8 @@ plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, 
     map_data %>%
       filter(Country.Region %in% countries,
              Province.State %in% state_province,
-             Confirmed > total_limit)
+             Confirmed > total_limit) %>%
+      if(type != 'Count') filter(., date_lag == 1) else .
   )
   
   if (type == 'Rate') {

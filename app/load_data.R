@@ -17,6 +17,7 @@ github_token <- function() {
 load_data <- function() {
   req <- tryCatch({
     token <- github_token()
+    cat('Authenticated - fetching\n')
     GET(urlfile, add_headers(Authorization = paste('Bearer', token, sep = ' ')))
   }, warning = function(w) {
     cat(w$message)
@@ -132,7 +133,7 @@ load_data <- function() {
       }, warning = function(w) {
         if (grepl('don\'t match the column names', w)) {
           tryCatch({
-            readr::read_csv(url(file.path(path, d)), col_types = col_specs[[2]], progress = TRUE)
+            suppressWarnings(readr::read_csv(url(file.path(path, d)), col_types = col_specs[[2]], progress = TRUE))
           })
         }
       }) %>%
@@ -160,7 +161,10 @@ load_data <- function() {
     dat$Country.Region <- sapply(dat$Country.Region, FUN = function(x) {ifelse(grepl('China', x), 'China', x)})
     
     dat <- dat %>%
-      replace_na(list(Province.State = Country.Region, Country.Region = 'Unknown Country')) %>%
+      mutate(Province.State = ifelse(is.na(Province.State) | Province.State == 'None',
+                                     Country.Region,
+                                     Province.State)) %>%
+      replace_na(list(Country.Region = 'Unknown Country')) %>%
       mutate_if(is.character, as.factor)
     
     if (!dir.exists('data')) dir.create('data')
@@ -292,7 +296,8 @@ assign(
                 summarise(First100Date = min(load_date, na.rm = TRUE)),
               by = c('Country.Region', 'Province.State')) %>%
     left_join(populations, by = c('Country.Region', 'Province.State')) %>%
-    mutate(normalized_date = as.numeric(difftime(load_date, First100Date, unit = 'days'))),
+    mutate(normalized_date = as.numeric(difftime(load_date, First100Date, unit = 'days')),
+           date_lag = difftime(load_date, lag(load_date), units = 'days')),
   envir = .GlobalEnv
 )
 
