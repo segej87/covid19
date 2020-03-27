@@ -153,7 +153,8 @@ load_data <- function() {
 
       dat <- dat %>%
         bind_rows(csv_data %>%
-                    mutate(load_date = date))
+                    mutate(load_date = date,
+                           Date = load_date - days(1)))
       
       pb$tick()
     }
@@ -221,7 +222,7 @@ assign(
 assign(
   'dat_summ',
   dat %>%
-    group_by(load_date, Country.Region, Province.State) %>%
+    group_by(Date, Country.Region, Province.State) %>%
     summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
               Deaths = sum(Deaths, na.rm = TRUE),
               Recovered = sum(Recovered, na.rm = TRUE)) %>%
@@ -277,7 +278,7 @@ assign(
 assign(
   'state_prov_grouped',
   dat_summ %>%
-    group_by(load_date, Country.Region, Province.State) %>%
+    group_by(Date, Country.Region, Province.State) %>%
     summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
               Deaths = sum(Deaths, na.rm = TRUE),
               Recovered = sum(Recovered, na.rm = TRUE)) %>%
@@ -289,15 +290,15 @@ assign(
            Deaths_accel = Deaths_rate - lag(Deaths_rate, default = 0),
            Recovered_accel = Recovered_rate - lag(Recovered_rate, default = 0)) %>%
     left_join(dat_summ %>%
-                group_by(load_date, Country.Region, Province.State) %>%
+                group_by(Date, Country.Region, Province.State) %>%
                 summarise(Confirmed = sum(Confirmed, na.rm = TRUE)) %>%
                 filter(Confirmed >= 100) %>%
                 group_by(Country.Region, Province.State) %>%
-                summarise(First100Date = min(load_date, na.rm = TRUE)),
+                summarise(First100Date = min(Date, na.rm = TRUE)),
               by = c('Country.Region', 'Province.State')) %>%
     left_join(populations, by = c('Country.Region', 'Province.State')) %>%
-    mutate(normalized_date = as.numeric(difftime(load_date, First100Date, unit = 'days')),
-           date_lag = difftime(load_date, lag(load_date), units = 'days')),
+    mutate(normalized_date = as.numeric(difftime(Date, First100Date, unit = 'days')),
+           date_lag = difftime(Date, lag(Date), units = 'days')),
   envir = .GlobalEnv
 )
 
@@ -317,7 +318,7 @@ assign(
            Deaths_accel = Deaths_rate - lag(Deaths_rate, default = 0),
            Recovered_accel = Recovered_rate - lag(Recovered_rate, default = 0)) %>%
     # left_join(populations, by = c('Country.Region', 'Province.State')) %>%
-    filter(load_date == max(load_date, na.rm = TRUE)) %>%
+    filter(Date == max(Date, na.rm = TRUE)) %>%
     mutate(Location_name = ifelse(Location == 'None', as.character(Country.Region), as.character(Location))),
   envir = .GlobalEnv
 )

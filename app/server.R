@@ -10,7 +10,7 @@ get_summary_dat <- function(countries, state_province, break_out_states, break_o
       dat_summ %>%
         filter(Country.Region %in% countries,
                Province.State %in% state_province) %>%
-        group_by(load_date, Country.Region) %>%
+        group_by(Date, Country.Region) %>%
         summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
                   Deaths = sum(Deaths, na.rm = TRUE),
                   Recovered = sum(Recovered, na.rm = TRUE),
@@ -25,23 +25,23 @@ get_summary_dat <- function(countries, state_province, break_out_states, break_o
         left_join(dat_summ %>%
                     filter(Country.Region %in% countries,
                            Province.State %in% state_province) %>%
-                    group_by(load_date, Country.Region) %>%
+                    group_by(Date, Country.Region) %>%
                     summarise(Confirmed = sum(Confirmed, na.rm = TRUE)) %>%
                     filter(Confirmed >= 100) %>%
                     group_by(Country.Region) %>%
-                    summarise(First100Date = min(load_date, na.rm = TRUE)),
+                    summarise(First100Date = min(Date, na.rm = TRUE)),
                   by = 'Country.Region') %>%
         left_join(country_populations, by = 'Country.Region') %>%
         mutate(Population = ifelse(AggStatePop == 0, CountryPopulation, AggStatePop)) %>%
-        mutate(normalized_date = as.numeric(difftime(load_date, First100Date, unit = 'days')),
-               date_lag = difftime(load_date, lag(load_date), units = 'days'))
+        mutate(normalized_date = as.numeric(difftime(Date, First100Date, unit = 'days')),
+               date_lag = difftime(Date, lag(Date), units = 'days'))
     )
   }
   
   if (!break_out_countries) {
     plot_dat <- plot_dat %>%
-      group_by(load_date) %>%
-      arrange(load_date) %>%
+      group_by(Date) %>%
+      arrange(Date) %>%
       summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
                 Deaths = sum(Deaths, na.rm = TRUE),
                 Recovered = sum(Recovered, na.rm = TRUE),
@@ -56,14 +56,14 @@ get_summary_dat <- function(countries, state_province, break_out_states, break_o
       left_join(dat_summ %>%
                   filter(Country.Region %in% countries,
                          Province.State %in% state_province) %>%
-                  group_by(load_date) %>%
+                  group_by(Date) %>%
                   summarise(Confirmed = sum(Confirmed, na.rm = TRUE)) %>%
                   filter(Confirmed >= 100) %>%
-                  summarise(First100Date = min(load_date, na.rm = TRUE)) %>%
+                  summarise(First100Date = min(Date, na.rm = TRUE)) %>%
                   mutate(Country.Region = 'World'),
                 by = 'Country.Region') %>%
-      mutate(normalized_date = as.numeric(difftime(load_date, First100Date, unit = 'days')),
-             date_lag = difftime(load_date, lag(load_date), units = 'days'))
+      mutate(normalized_date = as.numeric(difftime(Date, First100Date, unit = 'days')),
+             date_lag = difftime(Date, lag(Date), units = 'days'))
   }
   
   return(plot_dat)
@@ -107,7 +107,7 @@ plot_line <- function(countries, state_province, metric, break_out_states = FALS
   if (normalize_dates) {
     x = 'normalized_date'
   } else {
-    x = 'load_date'
+    x = 'Date'
   }
   
   if (normalize_pops) {
@@ -145,7 +145,7 @@ plot_line <- function(countries, state_province, metric, break_out_states = FALS
         filter(Country.Region %in% countries,
                Province.State %in% state_province) %>%
         left_join(plot_dat,
-                  by = append(by, c('Lockdown.Date' = 'load_date')),
+                  by = append(by, c('Lockdown.Date' = 'Date')),
                   suffix = c('', '.y'))
     )
     
@@ -253,7 +253,7 @@ plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, 
 
 top_10_table <- function() {
   plot_dat <- dat %>%
-    group_by(load_date, Country.Region) %>%
+    group_by(Date, Country.Region) %>%
     summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
               Deaths = sum(Deaths, na.rm = TRUE),
               Recovered = sum(Recovered, na.rm = TRUE)) %>%
@@ -261,9 +261,9 @@ top_10_table <- function() {
     mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
            Deaths_rate = Deaths - lag(Deaths, default = 0),
            Recovered_rate = Recovered - lag(Recovered, default = 0)) %>%
-    filter(load_date == max(load_date)) %>%
-    arrange(desc(load_date), desc(Confirmed_rate)) %>%
-    rename(Last.Updated = load_date) %>%
+    filter(Date == max(Date)) %>%
+    arrange(desc(Date), desc(Confirmed_rate)) %>%
+    rename(Last.Updated = Date) %>%
     select(Country.Region, Last.Updated, Confirmed_rate, Deaths_rate, Recovered_rate, Confirmed, Deaths, Recovered)
   
   num_cols <- names(sapply(data.frame(plot_dat), FUN = is.numeric)[which(sapply(data.frame(plot_dat), FUN = is.numeric))])
