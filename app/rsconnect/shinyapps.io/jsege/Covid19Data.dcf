@@ -1,0 +1,10 @@
+name: Covid19Data
+title:
+username:
+account: jsege
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2004660
+bundleId: 2930344
+url: https://jsege.shinyapps.io/Covid19Data/
+when: 1585275155.25302

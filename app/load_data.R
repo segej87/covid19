@@ -309,7 +309,7 @@ assign(
            !(is.na(Latitude) | is.na(Longitude))) %>%
     st_as_sf(coords = c('Longitude', 'Latitude'), crs = st_crs(world_base)) %>%
     mutate(CombinedLocation = ifelse(is.na(Admin2), as.character(Location), paste(Admin2, Location, sep = ', '))) %>%
-    group_by(ind, Country.Region, CombinedLocation)  %>%
+    group_by(Country.Region, CombinedLocation)  %>%
     mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
            Deaths_rate = Deaths - lag(Deaths, default = 0),
            Recovered_rate = Recovered - lag(Recovered, default = 0),
