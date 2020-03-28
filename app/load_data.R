@@ -8,7 +8,7 @@ github_token <- function() {
   token <- Sys.getenv('GITHUB_TOKEN')
   
   if (identical(token, '')) {
-    warning('No oAuth token found, going unauthenticated')
+    warning('No oAuth token found, going unauthenticated\n')
   }
   
   return(token)
