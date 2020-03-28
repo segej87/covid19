@@ -1,6 +1,10 @@
+install_from_binary: False
+
 packages:
    - shiny
    - shinythemes
+   - shinyWidgets
+   - shinyjs
    - plotly
    - tidyverse
    - sf
@@ -8,12 +12,10 @@ packages:
    - DT
    - progress
    - httr
-   - shinyWidgets
    - curl
    - RCurl
    - rjson
    - rsdmx
-   - shinyjs
 
 oecd_dbs:
     - BLI
