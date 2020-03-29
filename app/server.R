@@ -69,6 +69,70 @@ get_summary_dat <- function(countries, state_province, break_out_states, break_o
   return(plot_dat)
 }
 
+write_summary <- function(countries, state_province) {
+  plot_dat <- get_summary_dat(countries, state_province, break_out_states = FALSE, break_out_countries = FALSE) %>%
+    top_n(7, wt = Date)
+  
+  weekly_accel <- plot_dat %>%
+    select_at(vars('Date', contains('_rate')))
+  
+  confirmed_weekly_accel <- lm(Confirmed_rate~Date, data = weekly_accel)$coefficients['Date']
+  deaths_weekly_accel <- lm(Deaths_rate~Date, data = weekly_accel)$coefficients['Date']
+  
+  case_cov <- confirmed_weekly_accel/mean(weekly_accel$Confirmed_rate)
+  deaths_cov <- deaths_weekly_accel/mean(weekly_accel$Deaths_rate)
+  
+  top_1 <- plot_dat %>%
+    top_n(1, wt = Date)
+  
+  metric <- c('Confirmed' = '#FED8B1',
+              'Deaths' = '#DE5246',
+              'Recovered' = '#228C22')
+  
+  headers <- list()
+  contents <- list()
+  for (m in names(metric)) {
+    headers[m] <- paste0(
+      '<font size="6"; face=bold; font-family="lato">',
+      m,
+      '</font>'
+    )
+    
+    contents[m] <- paste0(
+      sprintf('<font size="6"; face=bold; color=%s; font-family="lato">', metric[m]),
+      format(as.numeric(top_1[,m]), big.mark = ','),
+      '</font>'
+    )
+  }
+  
+  assign('top_1', top_1, envir = .GlobalEnv)
+  
+  summary_text <- paste0(
+    '<font size="4"; font-family="lato">In the selected areas there have been<br>',
+    sprintf('<font color=%s; face=bold; font-family="lato">',metric['Confirmed']), format(top_1$Confirmed_rate, big.mark = ','), '</font>',
+    ' new cases<br>and ',
+    sprintf('<font color=%s; face=bold; font-family="lato">',metric['Deaths']), format(top_1$Deaths_rate, big.mark = ','), '</font>',
+    ' new deaths.<br>The new case rate is ',
+    if (case_cov > 0.05) '<font color=#De5246; face=bold; font-family="lato">accelerating</font>' else if (case_cov > -0.05) '<font color=#FED8B1; face=bold; font-family="lato">about steady</font>' else '<font color=#228C22; face=bold; font-family="lato">decelerating</font>',
+    '<br>and the deaths rate is ',
+    if (case_cov > 0.05) '<font color=#De5246; face=bold; font-family="lato">accelerating</font>' else if (case_cov > -0.05) '<font color=#FED8B1; face=bold; font-family="lato">about steady</font>' else '<font color=#228C22; face=bold; font-family="lato">decelerating</font>',
+    '</font>'
+  )
+  
+  header_row = paste0(
+    '<table style="width:100%"><tr>',
+    paste0(rep('<th></th>', length(metric) + 1), collapse = ''),
+    '</tr><tr><td align="center">',
+    paste(headers, collapse = '</td><td align="center">'),
+    '</td><td rowspan="2"; align="center">', summary_text ,'</td>',
+    '</tr><tr><td align="center">',
+    paste(contents, collapse = '</td><td align="center">'),
+    '</td></table>'
+  )
+  
+  return(header_row)
+}
+
 plot_line <- function(countries, state_province, metric, break_out_states = FALSE, show_lockdowns = FALSE, normalize_dates = FALSE, normalize_pops = FALSE, break_out_countries = TRUE, type = 'Count') {
   plot_dat <- get_summary_dat(countries, state_province, break_out_states, break_out_countries) %>%
     if (type != 'Count') filter(., date_lag == 1) else .
@@ -185,14 +249,6 @@ plot_line <- function(countries, state_province, metric, break_out_states = FALS
 }
 
 plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, type = 'Count', total_limit = 100) {
-  plot_dat <- suppressWarnings(
-    map_data %>%
-      filter(Country.Region %in% countries,
-             Province.State %in% state_province,
-             Confirmed > total_limit) %>%
-      if(type != 'Count') filter(., date_lag == 1) else .
-  )
-  
   if (type == 'Rate') {
     metric = paste0(metric, '_rate')
     y_title = 'New'
@@ -205,6 +261,14 @@ plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, 
     y_title = 'Total'
     legend.position = 'none'
   }
+  
+  plot_dat <- suppressWarnings(
+    map_data %>%
+      rename_at(metric, function(vars) 'metric') %>%
+      filter(Country.Region %in% countries,
+             Province.State %in% state_province,
+             metric > total_limit)
+  )
   
   # TODO: normalize by local population
   # if (normalize_pops) {
@@ -226,8 +290,8 @@ plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, 
             colour = 'white',
             lwd = 0.2) +
     geom_sf(data = plot_dat,
-            mapping = aes_string(size = metric,
-                                 colour = metric,
+            mapping = aes_string(size = 'metric',
+                                 colour = 'metric',
                                  text = 'CombinedLocation'),
             fill = 'none',
             alpha = 0.75) +
@@ -405,6 +469,10 @@ server <- function(input, output, session) {
   
   output$top10_table <- DT::renderDataTable({
     top_10_table()
+  })
+  
+  output$stats_summary <- renderUI({
+    HTML(do.call(write_summary, c(plot_vals()[1:2])))
   })
   
   output$plot <- renderPlotly({

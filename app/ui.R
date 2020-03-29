@@ -103,6 +103,15 @@ ui <- navbarPage(
       
       mainPanel(
         fluidRow(
+          htmlOutput(
+            outputId = 'stats_summary',
+            height = '50px'
+          )
+        ),
+        
+        br(),
+        
+        fluidRow(
           column(
             6,
             plotlyOutput(
