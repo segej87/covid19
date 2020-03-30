@@ -19,9 +19,9 @@ get_summary_dat <- function(countries, state_province, break_out_states, break_o
         mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
                Deaths_rate = Deaths - lag(Deaths, default = 0),
                Recovered_rate = Recovered - lag(Recovered, default = 0),
-               Confirmed_accel = Confirmed_rate - lag(Confirmed_rate, default = 0),
-               Deaths_accel = Deaths_rate - lag(Deaths_rate, default = 0),
-               Recovered_accel = Recovered_rate - lag(Recovered_rate, default = 0)) %>%
+               Confirmed_accel = (2 * Confirmed_rate - lag(Confirmed_rate, default = 0) - lag(Confirmed_rate, n = 2, default = 0))/2,
+               Deaths_accel = (2 * Deaths_rate - lag(Deaths_rate, default = 0) - lag(Deaths_rate, n = 2, default = 0))/2,
+               Recovered_accel = (2 * Recovered_rate - lag(Recovered_rate, default = 0) - lag(Recovered_rate, n = 2, default = 0))/2) %>%
         left_join(dat_summ %>%
                     filter(Country.Region %in% countries,
                            Province.State %in% state_province) %>%
@@ -49,9 +49,9 @@ get_summary_dat <- function(countries, state_province, break_out_states, break_o
       mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
              Deaths_rate = Deaths - lag(Deaths, default = 0),
              Recovered_rate = Recovered - lag(Recovered, default = 0),
-             Confirmed_accel = Confirmed_rate - lag(Confirmed_rate, default = 0),
-             Deaths_accel = Deaths_rate - lag(Deaths_rate, default = 0),
-             Recovered_accel = Recovered_rate - lag(Recovered_rate, default = 0)) %>%
+             Confirmed_accel = (2 * Confirmed_rate - lag(Confirmed_rate, default = 0) - lag(Confirmed_rate, n = 2, default = 0))/2,
+             Deaths_accel = (2 * Deaths_rate - lag(Deaths_rate, default = 0) - lag(Deaths_rate, n = 2, default = 0))/2,
+             Recovered_accel = (2 * Recovered_rate - lag(Recovered_rate, default = 0) - lag(Recovered_rate, n = 2, default = 0))/2) %>%
       mutate(Country.Region = 'World') %>%
       left_join(dat_summ %>%
                   filter(Country.Region %in% countries,
@@ -70,17 +70,20 @@ get_summary_dat <- function(countries, state_province, break_out_states, break_o
 }
 
 write_summary <- function(countries, state_province) {
+  rate_timeframe <- 4
+  
   plot_dat <- get_summary_dat(countries, state_province, break_out_states = FALSE, break_out_countries = FALSE) %>%
-    top_n(7, wt = Date)
+    top_n(rate_timeframe, wt = Date)
   
   weekly_accel <- plot_dat %>%
-    select_at(vars('Date', contains('_rate')))
+    select_at(vars('Date', contains('_rate'))) %>%
+    mutate_if(is.numeric, function(x) (x - min(x, na.rm = TRUE))/(max(x, na.rm = TRUE)-min(x, na.rm = TRUE)))
   
-  confirmed_weekly_accel <- lm(Confirmed_rate~Date, data = weekly_accel)$coefficients['Date']
-  deaths_weekly_accel <- lm(Deaths_rate~Date, data = weekly_accel)$coefficients['Date']
+  confirmed_weekly_accel <- lm(Confirmed_rate~Date, data = weekly_accel)
+  deaths_weekly_accel <- lm(Deaths_rate~Date, data = weekly_accel)
   
-  case_cov <- confirmed_weekly_accel/mean(weekly_accel$Confirmed_rate)
-  deaths_cov <- deaths_weekly_accel/mean(weekly_accel$Deaths_rate)
+  case_cov <- confirmed_weekly_accel$coefficients['Date']
+  deaths_cov <- deaths_weekly_accel$coefficients['Date']
   
   top_1 <- plot_dat %>%
     top_n(1, wt = Date)
@@ -110,24 +113,26 @@ write_summary <- function(countries, state_province) {
   summary_text <- paste0(
     '<font size="4"; font-family="lato">In the selected areas there have been<br>',
     sprintf('<font color=%s; face=bold; font-family="lato">',metric['Confirmed']), format(top_1$Confirmed_rate, big.mark = ','), '</font>',
-    ' new cases<br>and ',
+    ' new cases in the past day<br>and ',
     sprintf('<font color=%s; face=bold; font-family="lato">',metric['Deaths']), format(top_1$Deaths_rate, big.mark = ','), '</font>',
-    ' new deaths.<br>The new case rate is ',
+    sprintf(' new deaths. Over the past %s days<br>the new case rate is ', rate_timeframe),
     if (case_cov > 0.05) '<font color=#De5246; face=bold; font-family="lato">accelerating</font>' else if (case_cov > -0.05) '<font color=#FED8B1; face=bold; font-family="lato">about steady</font>' else '<font color=#228C22; face=bold; font-family="lato">decelerating</font>',
-    '<br>and the deaths rate is ',
-    if (case_cov > 0.05) '<font color=#De5246; face=bold; font-family="lato">accelerating</font>' else if (case_cov > -0.05) '<font color=#FED8B1; face=bold; font-family="lato">about steady</font>' else '<font color=#228C22; face=bold; font-family="lato">decelerating</font>',
+    '<br>and the death rate is ',
+    if (deaths_cov > 0.05) '<font color=#De5246; face=bold; font-family="lato">accelerating</font>' else if (deaths_cov > -0.05) '<font color=#FED8B1; face=bold; font-family="lato">about steady</font>' else '<font color=#228C22; face=bold; font-family="lato">decelerating</font>',
     '</font>'
   )
   
   header_row = paste0(
     '<table style="width:100%"><tr>',
     paste0(rep('<th></th>', length(metric) + 1), collapse = ''),
-    '</tr><tr><td align="center">',
-    paste(headers, collapse = '</td><td align="center">'),
-    '</td><td rowspan="2"; align="center">', summary_text ,'</td>',
-    '</tr><tr><td align="center">',
-    paste(contents, collapse = '</td><td align="center">'),
-    '</td></table>'
+    '</tr><tr><td align="center"; valign="bottom">',
+    paste(headers, collapse = '</td><td align="center"; valign="bottom">'),
+    '</td><td rowspan="3"; align="center">', summary_text ,'</td>',
+    '</tr><tr><td align="center"; valign="top">',
+    paste(contents, collapse = '</td><td align="center"; valign="top">'),
+    '</td><tr>',
+    paste0(rep('<td></td>', length(metric) + 1), collapse = ''),
+    '</tr></table>'
   )
   
   return(header_row)

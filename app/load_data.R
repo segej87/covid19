@@ -199,7 +199,7 @@ assign(
 
 state_prov_options <- dat %>%
   group_by(Country.Region) %>%
-  summarise(state_options = paste(unique(Province.State), collapse = ';;; '))
+  summarise(state_options = paste(sort(unique(Province.State)), collapse = ';;; '))
 state_prov_list <- as.list(state_prov_options$state_options)
 names(state_prov_list) <- state_prov_options$Country.Region
 assign(
@@ -286,9 +286,9 @@ assign(
     mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
            Deaths_rate = Deaths - lag(Deaths, default = 0),
            Recovered_rate = Recovered - lag(Recovered, default = 0),
-           Confirmed_accel = Confirmed_rate - lag(Confirmed_rate, default = 0),
-           Deaths_accel = Deaths_rate - lag(Deaths_rate, default = 0),
-           Recovered_accel = Recovered_rate - lag(Recovered_rate, default = 0)) %>%
+           Confirmed_accel = (2 * Confirmed_rate - lag(Confirmed_rate, default = 0) - lag(Confirmed_rate, n = 2, default = 0))/2,
+           Deaths_accel = (2 * Deaths_rate - lag(Deaths_rate, default = 0) - lag(Deaths_rate, n = 2, default = 0))/2,
+           Recovered_accel = (2 * Recovered_rate - lag(Recovered_rate, default = 0) - lag(Recovered_rate, n = 2, default = 0))/2) %>%
     left_join(dat_summ %>%
                 group_by(Date, Country.Region, Province.State) %>%
                 summarise(Confirmed = sum(Confirmed, na.rm = TRUE)) %>%
