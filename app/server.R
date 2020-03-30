@@ -138,7 +138,7 @@ write_summary <- function(countries, state_province) {
   return(header_row)
 }
 
-plot_line <- function(countries, state_province, metric, break_out_states = FALSE, show_lockdowns = FALSE, normalize_dates = FALSE, normalize_pops = FALSE, break_out_countries = TRUE, type = 'Count') {
+plot_line <- function(countries, state_province, metric, break_out_states = FALSE, show_lockdowns = FALSE, normalize_dates = FALSE, normalize_pops = FALSE, break_out_countries = TRUE, type = 'Count', log_transform = FALSE, zero_on = FALSE) {
   plot_dat <- get_summary_dat(countries, state_province, break_out_states, break_out_countries) %>%
     if (type != 'Count') filter(., date_lag == 1) else .
   
@@ -196,7 +196,11 @@ plot_line <- function(countries, state_province, metric, break_out_states = FALS
     labs(title = str_to_title(type),
          y = y_title,
          x = 'Date') +
-    geom_line(mapping = aes_string(y = metric[1]), linetype = line_types[metric[1]], lwd = 0.75)
+    geom_line(mapping = aes_string(y = metric[1]), lwd = 0.75)
+  
+  if (normalize_dates & zero_on) g <- g + scale_x_continuous(limits = c(0, max(plot_dat$normalized_date, na.rm = TRUE)))
+  
+  if (log_transform) g <- g + scale_y_continuous(trans = 'log2')
   
   if (length(metric) > 1) {
     g <- g + geom_line(mapping = aes_string(y = metric[2]), linetype = line_types[metric[2]], lwd = 0.75)
@@ -367,7 +371,9 @@ server <- function(input, output, session) {
         show_lockdowns = input$show_lockdowns,
         normalize_dates = input$normalize_dates,
         normalize_pops = input$normalize_pops,
-        break_out_countries = input$break_out_countries
+        break_out_countries = input$break_out_countries,
+        log_transform = input$log_transform,
+        zero_on = input$zero_on
       )
       
       assign('var_list', var_list, envir = .GlobalEnv)
@@ -413,6 +419,8 @@ server <- function(input, output, session) {
     normalize_dates <- input$normalize_dates
     normalize_pops <- input$normalize_pops
     break_out_countries <- input$break_out_countries
+    log_transform <- input$log_transform
+    zero_on <- input$zero_on
     
     if (exists('var_list')) {
       list_match <- all.equal(list(countries = countries,
@@ -422,7 +430,9 @@ server <- function(input, output, session) {
                                    show_lockdowns = show_lockdowns,
                                    normalize_dates = normalize_dates,
                                    normalize_pops = normalize_pops,
-                                   break_out_countries = break_out_countries),
+                                   break_out_countries = break_out_countries,
+                                   log_transform = log_transform,
+                                   zero_on = zero_on),
                               var_list)
       
       if (length(list_match) == 1) {
@@ -437,6 +447,17 @@ server <- function(input, output, session) {
     }
     
     if (break_out_states) updateCheckboxInput(session = session, inputId = 'break_out_countries', value = TRUE)
+  })
+  
+  observe({
+    x <- input$normalize_dates
+    
+    if (x == TRUE) {
+      shinyjs::show(id = 'zero_on')
+    } else {
+      updateCheckboxInput(session = session, inputId = 'zero_on', value = FALSE)
+      shinyjs::hide(id = 'zero_on')
+    }
   })
   
   observe({

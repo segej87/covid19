@@ -69,9 +69,22 @@ ui <- navbarPage(
           value = FALSE
         ),
         
+        hidden(
+          checkboxInput(
+            inputId = 'zero_on',
+            label = 'Only Show from Date Zero',
+            value = FALSE
+        )),
+        
         checkboxInput(
           inputId = 'show_lockdowns',
           label = 'Show Lockdowns',
+          value = FALSE
+        ),
+        
+        checkboxInput(
+          inputId = 'log_transform',
+          label = 'Log Transform y Axis',
           value = FALSE
         ),
         
