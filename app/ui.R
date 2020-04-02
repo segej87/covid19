@@ -118,7 +118,7 @@ ui <- navbarPage(
         
         plotOutput(
           outputId = 'spacer',
-          height = '400px'
+          height = '575px'
         )
       ),
       
@@ -205,8 +205,29 @@ ui <- navbarPage(
             tabPanel(
               title = 'Table',
               
-              DT::dataTableOutput(
-                outputId = 'top10_table'
+              column(
+                width = 1,
+                
+                pickerInput(
+                  inputId = 'table_level',
+                  label = NULL,
+                  choices = c('Country', 'State', 'Local'),
+                  width = '100px',
+                  
+                ),
+              ),
+              
+              column(
+                width = 11,
+                align = 'right',
+                
+                wellPanel(
+                  style = 'background:white',
+                  
+                  DT::dataTableOutput(
+                    outputId = 'top10_table'
+                  )
+                )
               )
             )
           )

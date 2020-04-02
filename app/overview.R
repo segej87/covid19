@@ -93,11 +93,19 @@ write_summary <- function(countries, state_province) {
     select_at(vars('Date', contains('_rate'))) %>%
     mutate_if(is.numeric, function(x) (x - min(x, na.rm = TRUE))/(max(x, na.rm = TRUE)-min(x, na.rm = TRUE)))
   
-  confirmed_weekly_accel <- lm(Confirmed_rate~Date, data = weekly_accel)
-  deaths_weekly_accel <- lm(Deaths_rate~Date, data = weekly_accel)
+  if (length(which(!is.na(weekly_accel$Confirmed_rate))) > 0) {
+    confirmed_weekly_accel <- lm(Confirmed_rate~Date, data = weekly_accel)
+    case_cov <- confirmed_weekly_accel$coefficients['Date']
+  } else {
+    case_cov <- NA
+  }
   
-  case_cov <- confirmed_weekly_accel$coefficients['Date']
-  deaths_cov <- deaths_weekly_accel$coefficients['Date']
+  if (length(which(!is.na(weekly_accel$Deaths_rate))) > 0) {
+    deaths_weekly_accel <- lm(Deaths_rate~Date, data = weekly_accel)
+    deaths_cov <- deaths_weekly_accel$coefficients['Date']
+  } else {
+    deaths_cov <- NA
+  }
   
   top_1 <- plot_dat %>%
     top_n(1, wt = Date)
@@ -130,9 +138,9 @@ write_summary <- function(countries, state_province) {
     ' new cases in the past day<br>and ',
     sprintf('<font color=%s; face=bold; font-family="lato">',metric['Deaths']), format(top_1$Deaths_rate, big.mark = ','), '</font>',
     sprintf(' new deaths. Over the past %s days<br>the new case rate is ', rate_timeframe),
-    if (case_cov > 0.05) '<font color=#De5246; face=bold; font-family="lato">accelerating</font>' else if (case_cov > -0.05) '<font color=#FED8B1; face=bold; font-family="lato">about steady</font>' else '<font color=#228C22; face=bold; font-family="lato">decelerating</font>',
+    if (is.na(case_cov)) '<font color=#228C22; face = bold; font-family="lato">level at zero</font>' else if (case_cov > 0.05) '<font color=#De5246; face=bold; font-family="lato">accelerating</font>' else if (case_cov > -0.05) '<font color=#FED8B1; face=bold; font-family="lato">about steady</font>' else '<font color=#228C22; face=bold; font-family="lato">decelerating</font>',
     '<br>and the death rate is ',
-    if (deaths_cov > 0.05) '<font color=#De5246; face=bold; font-family="lato">accelerating</font>' else if (deaths_cov > -0.05) '<font color=#FED8B1; face=bold; font-family="lato">about steady</font>' else '<font color=#228C22; face=bold; font-family="lato">decelerating</font>',
+    if (is.na(deaths_cov)) '<font color=#228C22; face = bold; font-family="lato">level at zero</font>' else if(deaths_cov > 0.05) '<font color=#De5246; face=bold; font-family="lato">accelerating</font>' else if (deaths_cov > -0.05) '<font color=#FED8B1; face=bold; font-family="lato">about steady</font>' else '<font color=#228C22; face=bold; font-family="lato">decelerating</font>',
     '</font>'
   )
   
@@ -357,22 +365,52 @@ plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, 
   return(ggplotly(map, tooltip = append('size', 'CombinedLocation')))
 }
 
-top_10_table <- function() {
+top_10_table <- function(table_level = 'Countries') {
   # start_time <- Sys.time()
   
-  plot_dat <- dat %>%
-    group_by(Date, Country.Region) %>%
-    summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
-              Deaths = sum(Deaths, na.rm = TRUE),
-              Recovered = sum(Recovered, na.rm = TRUE)) %>%
-    group_by(Country.Region) %>%
-    mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
-           Deaths_rate = Deaths - lag(Deaths, default = 0),
-           Recovered_rate = Recovered - lag(Recovered, default = 0)) %>%
-    filter(Date == max(Date)) %>%
-    arrange(desc(Date), desc(Confirmed_rate)) %>%
-    rename(Last.Updated = Date) %>%
-    select(Country.Region, Last.Updated, Confirmed_rate, Deaths_rate, Recovered_rate, Confirmed, Deaths, Recovered)
+  if (table_level == 'Country') {
+    plot_dat <- dat %>%
+      group_by(Date, Country.Region) %>%
+      summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
+                Deaths = sum(Deaths, na.rm = TRUE),
+                Recovered = sum(Recovered, na.rm = TRUE)) %>%
+      group_by(Country.Region) %>%
+      mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
+             Deaths_rate = Deaths - lag(Deaths, default = 0),
+             Recovered_rate = Recovered - lag(Recovered, default = 0)) %>%
+      filter(Date == max(Date)) %>%
+      arrange(desc(Date), desc(Confirmed_rate)) %>%
+      rename(Last.Updated = Date) %>%
+      select(Country.Region, Last.Updated, Confirmed_rate, Deaths_rate, Recovered_rate, Confirmed, Deaths, Recovered)
+  } else if (table_level == 'State') {
+    plot_dat <- dat %>%
+      group_by(Date, Country.Region, Province.State) %>%
+      summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
+                Deaths = sum(Deaths, na.rm = TRUE),
+                Recovered = sum(Recovered, na.rm = TRUE)) %>%
+      group_by(Country.Region, Province.State) %>%
+      mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
+             Deaths_rate = Deaths - lag(Deaths, default = 0),
+             Recovered_rate = Recovered - lag(Recovered, default = 0)) %>%
+      filter(Date == max(Date)) %>%
+      arrange(desc(Date), desc(Confirmed_rate)) %>%
+      rename(Last.Updated = Date) %>%
+      select(Country.Region, Province.State, Last.Updated, Confirmed_rate, Deaths_rate, Recovered_rate, Confirmed, Deaths, Recovered)
+  } else {
+    plot_dat <- dat %>%
+      group_by(Date, Country.Region, Province.State, Admin2) %>%
+      summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
+                Deaths = sum(Deaths, na.rm = TRUE),
+                Recovered = sum(Recovered, na.rm = TRUE)) %>%
+      group_by(Country.Region, Province.State, Admin2) %>%
+      mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
+             Deaths_rate = Deaths - lag(Deaths, default = 0),
+             Recovered_rate = Recovered - lag(Recovered, default = 0)) %>%
+      filter(Date == max(Date)) %>%
+      arrange(desc(Date), desc(Confirmed_rate)) %>%
+      rename(Last.Updated = Date) %>%
+      select(Country.Region, Province.State, Admin2, Last.Updated, Confirmed_rate, Deaths_rate, Recovered_rate, Confirmed, Deaths, Recovered)
+  }
   
   num_cols <- names(sapply(data.frame(plot_dat), FUN = is.numeric)[which(sapply(data.frame(plot_dat), FUN = is.numeric))])
   bad_cols <- num_cols[which(!grepl('Recovered', num_cols))]

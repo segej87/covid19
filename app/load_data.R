@@ -205,6 +205,8 @@ assign(
   envir = .GlobalEnv
 )
 
+assign('max_results_date', max(dat$Date, na.rm = TRUE), envir = .GlobalEnv)
+
 state_prov_options <- dat %>%
   group_by(Country.Region) %>%
   summarise(state_options = paste(sort(unique(Province.State)), collapse = ';;; '))

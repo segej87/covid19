@@ -170,17 +170,26 @@ server <- function(input, output, session) {
     input$log_transform_y
   })
   
+  table_level <- reactive({
+    req(input$table_level)
+    
+    input$table_level
+  })
+  
   output$data_update <- renderUI({
     connection_string <- ifelse(connected,
                                 '<font color=#00e600>Connected to data source</font>',
                                 '<font color=red>Not connected to data source</font>')
     
-    HTML(paste0('Data last updated: ', strftime(max_data_date, format = '%m/%d/%Y'),
-                '<br>',connection_string))
+    HTML(paste0('<font size="3"; face=bold; font-family="lato">Data last updated in source: ', strftime(max_data_date, format = '%m/%d/%Y'),
+                '</font><br><font size="3"; face=bold; font-family="lato">Most recent available data: ', strftime(max_results_date, format = '%m/%d/%Y'),
+                '</font><br>',connection_string))
   })
   
   output$top10_table <- DT::renderDataTable({
-    top_10_table()
+    top_10_table(
+      table_level = table_level()
+    )
   })
   
   output$stats_summary <- renderUI({
