@@ -17,6 +17,9 @@ packages:
    - rjson
    - rsdmx
    - data.table
+   #- promises
+   #- future
+   #- multiprocess
 
 oecd_dbs:
     - BLI

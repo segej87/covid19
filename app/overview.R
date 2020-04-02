@@ -1,70 +1,84 @@
 get_summary_dat <- function(countries, state_province, break_out_states, break_out_countries) {
+  # start_time <- Sys.time()
+  
   if (length(countries) == 1 & break_out_states) {
+    plot_dat <- state_prov_grouped %>%
+      as.data.table()
+    
     plot_dat <- suppressWarnings(
-      state_prov_grouped %>%
-        filter(Country.Region %in% countries,
-               Province.State %in% state_province)
+      plot_dat <- plot_dat[Country.Region %in% countries &
+                             Province.State %in% state_province]
     )
   } else {
-    plot_dat <- suppressWarnings(
-      dat_summ %>%
-        filter(Country.Region %in% countries,
-               Province.State %in% state_province) %>%
-        group_by(Date, Country.Region) %>%
+    if (!break_out_countries) {
+      plot_dat <- dat_summ %>%
+        as.data.table()
+      
+      plot_dat <- suppressWarnings(
+        plot_dat[Country.Region %in% countries &
+                             Province.State %in% state_province] %>%
+        group_by(Date) %>%
+        arrange(Date) %>%
         summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
                   Deaths = sum(Deaths, na.rm = TRUE),
                   Recovered = sum(Recovered, na.rm = TRUE),
-                  AggStatePop = sum(StatePopulation, na.rm = TRUE)) %>%
-        group_by(Country.Region) %>%
+                  Population = sum(StatePopulation, na.rm = TRUE)) %>%
         mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
                Deaths_rate = Deaths - lag(Deaths, default = 0),
                Recovered_rate = Recovered - lag(Recovered, default = 0),
                Confirmed_accel = (2 * Confirmed_rate - lag(Confirmed_rate, default = 0) - lag(Confirmed_rate, n = 2, default = 0))/2,
                Deaths_accel = (2 * Deaths_rate - lag(Deaths_rate, default = 0) - lag(Deaths_rate, n = 2, default = 0))/2,
                Recovered_accel = (2 * Recovered_rate - lag(Recovered_rate, default = 0) - lag(Recovered_rate, n = 2, default = 0))/2) %>%
+        mutate(Country.Region = 'World') %>%
         left_join(dat_summ %>%
                     filter(Country.Region %in% countries,
                            Province.State %in% state_province) %>%
-                    group_by(Date, Country.Region) %>%
+                    group_by(Date) %>%
                     summarise(Confirmed = sum(Confirmed, na.rm = TRUE)) %>%
                     filter(Confirmed >= 100) %>%
-                    group_by(Country.Region) %>%
-                    summarise(First100Date = min(Date, na.rm = TRUE)),
+                    summarise(First100Date = min(Date, na.rm = TRUE)) %>%
+                    mutate(Country.Region = 'World'),
                   by = 'Country.Region') %>%
-        left_join(country_populations, by = 'Country.Region') %>%
-        mutate(Population = ifelse(AggStatePop == 0, CountryPopulation, AggStatePop)) %>%
         mutate(normalized_date = as.numeric(difftime(Date, First100Date, unit = 'days')),
                date_lag = difftime(Date, lag(Date), units = 'days'))
-    )
+      )
+    } else {
+      plot_dat <- dat_summ %>%
+        as.data.table()
+      
+      plot_dat <- suppressWarnings(
+        plot_dat[Country.Region %in% countries &
+                               Province.State %in% state_province] %>%
+          group_by(Date, Country.Region) %>%
+          summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
+                    Deaths = sum(Deaths, na.rm = TRUE),
+                    Recovered = sum(Recovered, na.rm = TRUE),
+                    AggStatePop = sum(StatePopulation, na.rm = TRUE)) %>%
+          group_by(Country.Region) %>%
+          mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
+                 Deaths_rate = Deaths - lag(Deaths, default = 0),
+                 Recovered_rate = Recovered - lag(Recovered, default = 0),
+                 Confirmed_accel = (2 * Confirmed_rate - lag(Confirmed_rate, default = 0) - lag(Confirmed_rate, n = 2, default = 0))/2,
+                 Deaths_accel = (2 * Deaths_rate - lag(Deaths_rate, default = 0) - lag(Deaths_rate, n = 2, default = 0))/2,
+                 Recovered_accel = (2 * Recovered_rate - lag(Recovered_rate, default = 0) - lag(Recovered_rate, n = 2, default = 0))/2) %>%
+          left_join(dat_summ %>%
+                      filter(Country.Region %in% countries,
+                             Province.State %in% state_province) %>%
+                      group_by(Date, Country.Region) %>%
+                      summarise(Confirmed = sum(Confirmed, na.rm = TRUE)) %>%
+                      filter(Confirmed >= 100) %>%
+                      group_by(Country.Region) %>%
+                      summarise(First100Date = min(Date, na.rm = TRUE)),
+                    by = 'Country.Region') %>%
+          left_join(country_populations, by = 'Country.Region') %>%
+          mutate(Population = ifelse(AggStatePop == 0, CountryPopulation, AggStatePop)) %>%
+          mutate(normalized_date = as.numeric(difftime(Date, First100Date, unit = 'days')),
+                 date_lag = difftime(Date, lag(Date), units = 'days'))
+      )
+    }
   }
   
-  if (!break_out_countries) {
-    plot_dat <- plot_dat %>%
-      group_by(Date) %>%
-      arrange(Date) %>%
-      summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
-                Deaths = sum(Deaths, na.rm = TRUE),
-                Recovered = sum(Recovered, na.rm = TRUE),
-                Population = sum(Population, na.rm = TRUE)) %>%
-      mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
-             Deaths_rate = Deaths - lag(Deaths, default = 0),
-             Recovered_rate = Recovered - lag(Recovered, default = 0),
-             Confirmed_accel = (2 * Confirmed_rate - lag(Confirmed_rate, default = 0) - lag(Confirmed_rate, n = 2, default = 0))/2,
-             Deaths_accel = (2 * Deaths_rate - lag(Deaths_rate, default = 0) - lag(Deaths_rate, n = 2, default = 0))/2,
-             Recovered_accel = (2 * Recovered_rate - lag(Recovered_rate, default = 0) - lag(Recovered_rate, n = 2, default = 0))/2) %>%
-      mutate(Country.Region = 'World') %>%
-      left_join(dat_summ %>%
-                  filter(Country.Region %in% countries,
-                         Province.State %in% state_province) %>%
-                  group_by(Date) %>%
-                  summarise(Confirmed = sum(Confirmed, na.rm = TRUE)) %>%
-                  filter(Confirmed >= 100) %>%
-                  summarise(First100Date = min(Date, na.rm = TRUE)) %>%
-                  mutate(Country.Region = 'World'),
-                by = 'Country.Region') %>%
-      mutate(normalized_date = as.numeric(difftime(Date, First100Date, unit = 'days')),
-             date_lag = difftime(Date, lag(Date), units = 'days'))
-  }
+  # cat(sprintf('Load data: %.2f\n', as.numeric(difftime(Sys.time(), start_time, units = 'secs'))))
   
   return(plot_dat)
 }
@@ -139,6 +153,8 @@ write_summary <- function(countries, state_province) {
 }
 
 plot_line <- function(countries, state_province, metric, break_out_states = FALSE, show_lockdowns = FALSE, normalize_dates = FALSE, normalize_pops = FALSE, normalize_tests = FALSE, break_out_countries = TRUE, type = 'Count', log_transform = FALSE, zero_on = FALSE) {
+  # start_time <- Sys.time()
+  
   plot_dat <- get_summary_dat(countries, state_province, break_out_states, break_out_countries) %>%
     if (type != 'Count') filter(., date_lag == 1) else .
   
@@ -258,12 +274,16 @@ plot_line <- function(countries, state_province, metric, break_out_states = FALS
           legend.text = element_text(color = 'white', face = 'bold'),
           legend.background = element_rect(fill = '#2b3e50'))
   
+  # cat(sprintf('Line: %.2f\n', as.numeric(difftime(Sys.time(), start_time, units = 'secs'))))
+  
   ggplotly(g) %>%
     layout(paper_bgcolor = NULL,
            plot_bgcolor = NULL)
 }
 
 plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, type = 'Count', total_limit = 100) {
+  # start_time <- Sys.time()
+  
   if (type == 'Rate') {
     metric = paste0(metric, '_rate')
     y_title = 'New'
@@ -296,21 +316,12 @@ plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, 
     '<br><b>Confirmed:</b> %{Confirmed}'
   )
   
-  xlim <- st_bbox(plot_dat)[c('xmin', 'xmax')]
-  ylim <- st_bbox(plot_dat)[c('ymin', 'ymax')]
-  
   map <- ggplot() +
     geom_sf(data = world_base,
             fill = '#2b3e50',
             colour = 'white',
             lwd = 0.2) +
-    geom_sf(data = plot_dat,
-            mapping = aes_string(size = 'metric',
-                                 colour = 'metric',
-                                 text = 'CombinedLocation'),
-            fill = 'none',
-            alpha = 0.75) +
-    coord_sf(xlim = xlim, ylim = ylim) +
+    coord_fixed() +
     scale_colour_distiller(palette = 'Spectral') +
     theme(panel.background = element_rect(fill = '#2b3e50'),
           plot.background = element_rect(fill = '#2b3e50'),
@@ -327,10 +338,28 @@ plot_map <- function(countries, state_province, metric, normalize_pops = FALSE, 
           legend.text = element_text(color = 'white', face = 'bold'),
           legend.background = element_rect(fill = '#2b3e50'))
   
+  if (nrow(plot_dat) > 0) {
+    xlim <- st_bbox(plot_dat)[c('xmin', 'xmax')]
+    ylim <- st_bbox(plot_dat)[c('ymin', 'ymax')]
+    
+    map <- map +
+      geom_sf(data = plot_dat,
+              mapping = aes_string(size = 'metric',
+                                   colour = 'metric',
+                                   text = 'CombinedLocation'),
+              fill = 'none',
+              alpha = 0.75) +
+      coord_sf(xlim = xlim, ylim = ylim)
+  }
+  
+  # cat(sprintf('Map: %.2f\n', as.numeric(difftime(Sys.time(), start_time, units = 'secs'))))
+  
   return(ggplotly(map, tooltip = append('size', 'CombinedLocation')))
 }
 
 top_10_table <- function() {
+  # start_time <- Sys.time()
+  
   plot_dat <- dat %>%
     group_by(Date, Country.Region) %>%
     summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
@@ -361,6 +390,8 @@ top_10_table <- function() {
     formatStyle(columns = 1:nrow(plot_dat), color = 'black') %>%
     formatStyle(bad_cols, backgroundColor = styleInterval(bad_brks, bad_clrs)) %>%
     formatDate(columns = 'Last.Updated')
+  
+  # cat(sprintf('Table: %.2f\n', as.numeric(difftime(Sys.time(), start_time, units = 'secs'))))
   
   return(dt)
 }

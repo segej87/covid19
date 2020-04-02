@@ -150,9 +150,9 @@ load_data <- function() {
           })
         }
       }
-
+      
       date = as.Date(basename(gsub('[.][[:alnum:]]+$', '', d)), '%m-%d-%Y')
-
+      
       dat <- dat %>%
         bind_rows(csv_data %>%
                     mutate(load_date = date,
@@ -197,7 +197,7 @@ assign(
     mutate(AbbrevMatch = str_extract(Province.State, abbrev_pattern)) %>%
     left_join(abbrevs, by = c('AbbrevMatch' = 'Code'), suffix = c('', '.y')) %>%
     mutate(Location = Province.State,
-      Province.State = ifelse(!is.na(Province.State.y), Province.State.y, Location)) %>%
+           Province.State = ifelse(!is.na(Province.State.y), Province.State.y, Location)) %>%
     select(-AbbrevMatch, -Province.State.y, -Abbrev) %>%
     # End of state cleanup section
     left_join(testing, by = c('Province.State' = 'Province.State', 'Date' = 'Date')) %>%
@@ -242,8 +242,12 @@ assign(
 
 assign(
   'world_base',
-  st_read('geo/Countries_WGS84.shp',
-          quiet = TRUE),
+  suppressWarnings(
+    st_read('geo/ne_50m_admin_0_countries.shp',
+            quiet = TRUE) %>% filter(NAME != 'Antarctica') %>%
+      st_simplify(TRUE, dTolerance = 0.05) %>%
+      st_cast("MULTIPOLYGON")
+  ),
   envir = .GlobalEnv
 )
 

@@ -265,7 +265,7 @@ ui <- navbarPage(
         plotlyOutput(
           outputId = 'association_plot',
           width = '100%',
-          height = '100%'
+          height = 600
         )
       )
     )

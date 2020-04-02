@@ -1,7 +1,7 @@
 plot_associations <- function(chart_type, x_axis, y_axis, colour, log_transform_x = FALSE, log_transform_y = FALSE) {
   plot_dat <- state_prov_grouped
   
-  if (is.factor(plot_dat[, x_axis]) | x_axis %in% c('Population', 'Density', 'First100Date')) {
+  if (is.factor(plot_dat[, x_axis]) | x_axis %in% c('Population', 'Density', 'First100Date') | grepl('accel|rate', x_axis) | grepl('accel_rate', y_axis)) {
     plot_dat <- plot_dat %>%
       filter(Date == max(Date))
   }
