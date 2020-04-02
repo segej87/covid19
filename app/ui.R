@@ -63,6 +63,14 @@ ui <- navbarPage(
           value = FALSE
         ),
         
+        hidden(
+          checkboxInput(
+            inputId = 'normalize_tests',
+            label = 'Normalize by Number of Tests (beta)',
+            value = FALSE
+          )
+        ),
+        
         checkboxInput(
           inputId = 'normalize_dates',
           label = 'Normalize Dates',
@@ -74,7 +82,7 @@ ui <- navbarPage(
             inputId = 'zero_on',
             label = 'Only Show from Date Zero',
             value = FALSE
-        )),
+          )),
         
         checkboxInput(
           inputId = 'show_lockdowns',
@@ -178,7 +186,7 @@ ui <- navbarPage(
                   inputId = 'total_limit',
                   label = 'Min. # Cases to Show',
                   width = '150px',
-                  value = 100
+                  value = 1000
                 )
               ),
               
@@ -208,6 +216,58 @@ ui <- navbarPage(
   ),
   
   tabPanel(
-    'Association Explorer (coming soon)'
+    'Association Explorer (coming soon)',
+    
+    sidebarLayout(
+      sidebarPanel(
+        pickerInput(
+          inputId = 'chart_type',
+          label = 'Chart Type',
+          choices = c('Point', 'Line', 'Bar'),
+          selected = 'Point'
+        ),
+        
+        pickerInput(
+          inputId = 'x_axis',
+          label = 'x Axis',
+          choices = names(state_prov_grouped),
+          selected = c('Confirmed')
+        ),
+        
+        pickerInput(
+          inputId = 'y_axis',
+          label = 'y Axis',
+          choices = names(state_prov_grouped),
+          selected = c('Deaths')
+        ),
+        
+        pickerInput(
+          inputId = 'colour',
+          label = 'Color',
+          choices = names(state_prov_grouped),
+          selected = 'Country.Region'
+        ),
+        
+        checkboxInput(
+          inputId = 'log_transform_x',
+          label = 'Log Transform x Axis',
+          value = FALSE
+        ),
+        
+        checkboxInput(
+          inputId = 'log_transform_y',
+          label = 'Log Transform y Axis',
+          value = FALSE
+        )
+      ),
+      
+      mainPanel(
+        plotlyOutput(
+          outputId = 'association_plot',
+          width = '100%',
+          height = '100%'
+        )
+      )
+    )
   )
 )

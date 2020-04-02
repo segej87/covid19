@@ -4,6 +4,8 @@ library(curl)
 
 urlfile='https://api.github.com/repos/CSSEGISandData/COVID-19/git/trees/master?recursive=1'
 
+urltesting <- 'http://covidtracking.com/api/states/daily.csv'
+
 github_token <- function() {
   token <- Sys.getenv('GITHUB_TOKEN')
   
@@ -179,6 +181,11 @@ load_data <- function() {
 abbrevs <- read.csv('data/state_abbrevs.csv', stringsAsFactors = F)
 abbrev_pattern <- paste0(abbrevs$Code, collapse = '|')
 
+testing <- read.csv(urltesting) %>%
+  left_join(abbrevs, by = c('state' = 'Code')) %>%
+  mutate(Date = as.Date(as.character(date), format = '%Y%m%d') - days(1)) %>%
+  as_tibble()
+
 assign(
   'dat',
   load_data() %>%
@@ -193,6 +200,7 @@ assign(
       Province.State = ifelse(!is.na(Province.State.y), Province.State.y, Location)) %>%
     select(-AbbrevMatch, -Province.State.y, -Abbrev) %>%
     # End of state cleanup section
+    left_join(testing, by = c('Province.State' = 'Province.State', 'Date' = 'Date')) %>%
     mutate_if(is.character, as.factor),
   envir = .GlobalEnv
 )
@@ -297,6 +305,7 @@ assign(
                 summarise(First100Date = min(Date, na.rm = TRUE)),
               by = c('Country.Region', 'Province.State')) %>%
     left_join(populations, by = c('Country.Region', 'Province.State')) %>%
+    left_join(testing, by = c('Province.State' = 'Province.State', 'Date' = 'Date')) %>%
     mutate(normalized_date = as.numeric(difftime(Date, First100Date, unit = 'days')),
            date_lag = difftime(Date, lag(Date), units = 'days')),
   envir = .GlobalEnv

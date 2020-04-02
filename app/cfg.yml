@@ -16,6 +16,7 @@ packages:
    - RCurl
    - rjson
    - rsdmx
+   - data.table
 
 oecd_dbs:
     - BLI
