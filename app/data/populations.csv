@@ -1,280 +1,280 @@
 Country.Region,Province.State,Population,Density,Source,Level
-Afghanistan,None,37172386,,World Bank,Country.Region
-Albania,None,2866376,,World Bank,Country.Region
-Algeria,None,42228429,,World Bank,Country.Region
-American Samoa,None,55465,,World Bank,Country.Region
-Andorra,None,77006,,World Bank,Country.Region
-Angola,None,30809762,,World Bank,Country.Region
-Antigua and Barbuda,None,96286,,World Bank,Country.Region
-Arab World,None,419790588,,World Bank,Country.Region
-Argentina,None,44494502,,World Bank,Country.Region
-Armenia,None,2951776,,World Bank,Country.Region
-Aruba,None,105845,,World Bank,Country.Region
-Australia,None,24992369,,World Bank,Country.Region
-Austria,None,8847037,,World Bank,Country.Region
-Azerbaijan,None,9942334,,World Bank,Country.Region
-"Bahamas, The",None,385640,,World Bank,Country.Region
-Bahrain,None,1569439,,World Bank,Country.Region
-Bangladesh,None,161356039,,World Bank,Country.Region
-Barbados,None,286641,,World Bank,Country.Region
-Belarus,None,9485386,,World Bank,Country.Region
-Belgium,None,11422068,,World Bank,Country.Region
-Belize,None,383071,,World Bank,Country.Region
-Benin,None,11485048,,World Bank,Country.Region
-Bermuda,None,63968,,World Bank,Country.Region
-Bhutan,None,754394,,World Bank,Country.Region
-Bolivia,None,11353142,,World Bank,Country.Region
-Bosnia and Herzegovina,None,3323929,,World Bank,Country.Region
-Botswana,None,2254126,,World Bank,Country.Region
-Brazil,None,209469333,,World Bank,Country.Region
-British Virgin Islands,None,29802,,World Bank,Country.Region
-Brunei Darussalam,None,428962,,World Bank,Country.Region
-Brunei,None,428962,,World Bank,Country.Region
-Bulgaria,None,7024216,,World Bank,Country.Region
-Burkina Faso,None,19751535,,World Bank,Country.Region
-Burundi,None,11175378,,World Bank,Country.Region
-Cabo Verde,None,543767,,World Bank,Country.Region
-Cambodia,None,16249798,,World Bank,Country.Region
-Cameroon,None,25216237,,World Bank,Country.Region
-Canada,None,37058856,,World Bank,Country.Region
-Caribbean small states,None,7358965,,World Bank,Country.Region
-Cayman Islands,None,64174,,World Bank,Country.Region
-Central African Republic,None,4666377,,World Bank,Country.Region
-Central Europe and the Baltics,None,102511922,,World Bank,Country.Region
-Chad,None,15477751,,World Bank,Country.Region
-Channel Islands,None,170499,,World Bank,Country.Region
-Chile,None,18729160,,World Bank,Country.Region
-China,None,1392730000,,World Bank,Country.Region
-Colombia,None,49648685,,World Bank,Country.Region
-Comoros,None,832322,,World Bank,Country.Region
-"Congo, Dem. Rep.",None,84068091,,World Bank,Country.Region
-"Congo, Rep.",None,5244363,,World Bank,Country.Region
-Congo (Kinshasa),None,11860000,,Google,Country.Region
-Costa Rica,None,4999441,,World Bank,Country.Region
-Cote d'Ivoire,None,25069229,,World Bank,Country.Region
-Croatia,None,4089400,,World Bank,Country.Region
-Cuba,None,11338138,,World Bank,Country.Region
-Curacao,None,159849,,World Bank,Country.Region
-Cyprus,None,1189265,,World Bank,Country.Region
-Czech Republic,None,10625695,,World Bank,Country.Region
-Czechia,None,10625695,,World Bank,Country.Region
-Denmark,None,5797446,,World Bank,Country.Region
-Djibouti,None,958920,,World Bank,Country.Region
-Dominica,None,71625,,World Bank,Country.Region
-Dominican Republic,None,10627165,,World Bank,Country.Region
-Early-demographic dividend,None,3249140605,,World Bank,Country.Region
-East Asia & Pacific,None,2328220870,,World Bank,Country.Region
-East Asia & Pacific (excluding high income),None,2081651801,,World Bank,Country.Region
-East Asia & Pacific (IDA & IBRD countries),None,2056064424,,World Bank,Country.Region
-Ecuador,None,17084357,,World Bank,Country.Region
-"Egypt, Arab Rep.",None,98423595,,World Bank,Country.Region
-Egypt,None,98423595,,World Bank,Country.Region
-El Salvador,None,6420744,,World Bank,Country.Region
-Equatorial Guinea,None,1308974,,World Bank,Country.Region
-Eritrea,None,3213972,,World Bank,Country.Region
-Estonia,None,1320884,,World Bank,Country.Region
-Eswatini,None,1136191,,World Bank,Country.Region
-Ethiopia,None,109224559,,World Bank,Country.Region
-Euro area,None,341783171,,World Bank,Country.Region
-Europe & Central Asia,None,918793590,,World Bank,Country.Region
-Europe & Central Asia (excluding high income),None,417797257,,World Bank,Country.Region
-Europe & Central Asia (IDA & IBRD countries),None,459865205,,World Bank,Country.Region
-European Union,None,513213363,,World Bank,Country.Region
-Faroe Islands,None,48497,,World Bank,Country.Region
-Fiji,None,883483,,World Bank,Country.Region
-Finland,None,5518050,,World Bank,Country.Region
-Fragile and conflict affected situations,None,515215936,,World Bank,Country.Region
-France,None,66987244,,World Bank,Country.Region
-French Guiana,None,290691,,Google,Country.Region
-French Polynesia,None,277679,,World Bank,Country.Region
-Gabon,None,2119275,,World Bank,Country.Region
-"Gambia, The",None,2280102,,World Bank,Country.Region
-Georgia,None,3731000,,World Bank,Country.Region
-Germany,None,82927922,,World Bank,Country.Region
-Ghana,None,29767108,,World Bank,Country.Region
-Gibraltar,None,33718,,World Bank,Country.Region
-Great Britain,None,65844142,,OECD,Country.Region
-Greece,None,10727668,,World Bank,Country.Region
-Greenland,None,56025,,World Bank,Country.Region
-Grenada,None,111454,,World Bank,Country.Region
-Guam,None,165768,,World Bank,Country.Region
-Guatemala,None,17247807,,World Bank,Country.Region
-Guinea,None,12414318,,World Bank,Country.Region
-Guinea-Bissau,None,1874309,,World Bank,Country.Region
-Guyana,None,779004,,World Bank,Country.Region
-Haiti,None,11123176,,World Bank,Country.Region
-Heavily indebted poor countries (HIPC),None,780234406,,World Bank,Country.Region
-High income,None,1210312147,,World Bank,Country.Region
-Holy See,None,1000,,Google,Country.Region
-Honduras,None,9587522,,World Bank,Country.Region
-"Hong Kong SAR, China",None,7451000,,World Bank,Country.Region
-Hungary,None,9768785,,World Bank,Country.Region
-IBRD only,None,4772284113,,World Bank,Country.Region
-Iceland,None,353574,,World Bank,Country.Region
-IDA & IBRD total,None,6412522234,,World Bank,Country.Region
-IDA blend,None,555830605,,World Bank,Country.Region
-IDA only,None,1084407516,,World Bank,Country.Region
-IDA total,None,1640238121,,World Bank,Country.Region
-India,None,1352617328,,World Bank,Country.Region
-Indonesia,None,267663435,,World Bank,Country.Region
-"Iran, Islamic Rep.",None,81800269,,World Bank,Country.Region
-Iran (Islamic Republic of),None,81800269,,World Bank,Country.Region
-Iran,None,81800269,,World Bank,Country.Region
-Iraq,None,38433600,,World Bank,Country.Region
-Ireland,None,4853506,,World Bank,Country.Region
-Isle of Man,None,84077,,World Bank,Country.Region
-Israel,None,8883800,,World Bank,Country.Region
-Italy,None,60431283,,World Bank,Country.Region
-Jamaica,None,2934855,,World Bank,Country.Region
-Japan,None,126529100,,World Bank,Country.Region
-Jordan,None,9956011,,World Bank,Country.Region
-Kazakhstan,None,18276499,,World Bank,Country.Region
-Kenya,None,51393010,,World Bank,Country.Region
-Kiribati,None,115847,,World Bank,Country.Region
-"Korea, Dem. People's Rep.",None,25549819,,World Bank,Country.Region
-"Korea, Rep.",None,51635256,,World Bank,Country.Region
-Republic of Korea,None,51635256,,World Bank,Country.Region
-Kosovo,None,1845300,,World Bank,Country.Region
-Kuwait,None,4137309,,World Bank,Country.Region
-Kyrgyz Republic,None,6315800,,World Bank,Country.Region
-Kyrgyzstan,None,6315800,,World Bank,Country.Region
-Lao PDR,None,7061507,,World Bank,Country.Region
-Late-demographic dividend,None,2288665963,,World Bank,Country.Region
-Latin America & Caribbean,None,641357515,,World Bank,Country.Region
-Latin America & Caribbean (excluding high income),None,609013934,,World Bank,Country.Region
-Latin America & the Caribbean (IDA & IBRD countries),None,625569713,,World Bank,Country.Region
-Latvia,None,1926542,,World Bank,Country.Region
-Least developed countries: UN classification,None,1009662578,,World Bank,Country.Region
-Lebanon,None,6848925,,World Bank,Country.Region
-Lesotho,None,2108132,,World Bank,Country.Region
-Liberia,None,4818977,,World Bank,Country.Region
-Libya,None,6678567,,World Bank,Country.Region
-Liechtenstein,None,37910,,World Bank,Country.Region
-Lithuania,None,2789533,,World Bank,Country.Region
-Low & middle income,None,6383958209,,World Bank,Country.Region
-Low income,None,705417321,,World Bank,Country.Region
-Lower middle income,None,3022905169,,World Bank,Country.Region
-Luxembourg,None,607728,,World Bank,Country.Region
-"Macao SAR, China",None,631636,,World Bank,Country.Region
-Madagascar,None,26262368,,World Bank,Country.Region
-Malawi,None,18143315,,World Bank,Country.Region
-Malaysia,None,31528585,,World Bank,Country.Region
-Maldives,None,515696,,World Bank,Country.Region
-Mali,None,19077690,,World Bank,Country.Region
-Malta,None,483530,,World Bank,Country.Region
-Marshall Islands,None,58413,,World Bank,Country.Region
-Mauritania,None,4403319,,World Bank,Country.Region
-Mauritius,None,1265303,,World Bank,Country.Region
-Mexico,None,126190788,,World Bank,Country.Region
-"Micronesia, Fed. Sts.",None,112640,,World Bank,Country.Region
-Middle East & North Africa,None,448912859,,World Bank,Country.Region
-Middle East & North Africa (excluding high income),None,382896715,,World Bank,Country.Region
-Middle East & North Africa (IDA & IBRD countries),None,378327628,,World Bank,Country.Region
-Middle income,None,5678540888,,World Bank,Country.Region
-Moldova,None,3545883,,World Bank,Country.Region
-Monaco,None,38682,,World Bank,Country.Region
-Mongolia,None,3170208,,World Bank,Country.Region
-Montenegro,None,622345,,World Bank,Country.Region
-Morocco,None,36029138,,World Bank,Country.Region
-Mozambique,None,29495962,,World Bank,Country.Region
-Myanmar,None,53708395,,World Bank,Country.Region
-Namibia,None,2448255,,World Bank,Country.Region
-Nauru,None,12704,,World Bank,Country.Region
-Nepal,None,28087871,,World Bank,Country.Region
-Netherlands,None,17231017,,World Bank,Country.Region
-New Caledonia,None,284060,,World Bank,Country.Region
-New Zealand,None,4885500,,World Bank,Country.Region
-Nicaragua,None,6465513,,World Bank,Country.Region
-Niger,None,22442948,,World Bank,Country.Region
-Nigeria,None,195874740,,World Bank,Country.Region
-North America,None,364290258,,World Bank,Country.Region
-North Macedonia,None,2082958,,World Bank,Country.Region
-Northern Mariana Islands,None,56882,,World Bank,Country.Region
-Norway,None,5314336,,World Bank,Country.Region
-OECD members,None,1303529456,,World Bank,Country.Region
-Oman,None,4829483,,World Bank,Country.Region
-Other small states,None,30758989,,World Bank,Country.Region
-Pacific island small states,None,2457367,,World Bank,Country.Region
-Pakistan,None,212215030,,World Bank,Country.Region
-Palau,None,17907,,World Bank,Country.Region
-Panama,None,4176873,,World Bank,Country.Region
-Papua New Guinea,None,8606316,,World Bank,Country.Region
-Paraguay,None,6956071,,World Bank,Country.Region
-Peru,None,31989256,,World Bank,Country.Region
-Philippines,None,106651922,,World Bank,Country.Region
-Poland,None,37978548,,World Bank,Country.Region
-Portugal,None,10281762,,World Bank,Country.Region
-Post-demographic dividend,None,1109997273,,World Bank,Country.Region
-Pre-demographic dividend,None,919485393,,World Bank,Country.Region
-Puerto Rico,None,3195153,,World Bank,Country.Region
-Qatar,None,2781677,,World Bank,Country.Region
-Romania,None,19473936,,World Bank,Country.Region
-Russia,None,146804372,,OECD,Country.Region
-Russian Federation,None,144478050,,World Bank,Country.Region
-Rwanda,None,12301939,,World Bank,Country.Region
-Saint Kitts and Nevis,None,55345,,World Bank,Country.Region
-Saint Lucia,None,178844,,World Bank,Country.Region
-Saint Vincent and the Grenadines,None,109897,,World Bank,Country.Region
-Samoa,None,196130,,World Bank,Country.Region
-San Marino,None,33785,,World Bank,Country.Region
-Sao Tome and Principe,None,211028,,World Bank,Country.Region
-Saudi Arabia,None,33699947,,World Bank,Country.Region
-Senegal,None,15854360,,World Bank,Country.Region
-Serbia,None,6982084,,World Bank,Country.Region
-Seychelles,None,96762,,World Bank,Country.Region
-Sierra Leone,None,7650154,,World Bank,Country.Region
-Singapore,None,5638676,,World Bank,Country.Region
-Sint Maarten (Dutch part),None,40654,,World Bank,Country.Region
-Slovak Republic,None,5447011,,World Bank,Country.Region
-Slovakia,None,5435343,,OECD,Country.Region
-Slovenia,None,2067372,,World Bank,Country.Region
-Small states,None,40575321,,World Bank,Country.Region
-Solomon Islands,None,652858,,World Bank,Country.Region
-Somalia,None,15008154,,World Bank,Country.Region
-South Africa,None,57779622,,World Bank,Country.Region
-South Asia,None,1814388744,,World Bank,Country.Region
-South Asia (IDA & IBRD),None,1814388744,,World Bank,Country.Region
-South Korea,None,51446201,,OECD,Country.Region
-"Korea, South",None,51446201,,OECD,Country.Region
-South Sudan,None,10975920,,World Bank,Country.Region
-Spain,None,46723749,,World Bank,Country.Region
-Sri Lanka,None,21670000,,World Bank,Country.Region
-St. Kitts and Nevis,None,52441,,World Bank,Country.Region
-St. Lucia,None,181889,,World Bank,Country.Region
-St. Martin (French part),None,37264,,World Bank,Country.Region
-St. Vincent and the Grenadines,None,110210,,World Bank,Country.Region
-Sub-Saharan Africa,None,1078306520,,World Bank,Country.Region
-Sub-Saharan Africa (excluding high income),None,1078209758,,World Bank,Country.Region
-Sub-Saharan Africa (IDA & IBRD countries),None,1078306520,,World Bank,Country.Region
-Sudan,None,41801533,,World Bank,Country.Region
-Suriname,None,575991,,World Bank,Country.Region
-Sweden,None,10183175,,World Bank,Country.Region
-Switzerland,None,8516543,,World Bank,Country.Region
-Syrian Arab Republic,None,16906283,,World Bank,Country.Region
-Syria,None,16906283,,World Bank,Country.Region
-Tajikistan,None,9100837,,World Bank,Country.Region
-Taiwan*,None,23780000,,Google,Country.Region
-Taiwan,None,23780000,,Google,Country.Region
-Tanzania,None,56318348,,World Bank,Country.Region
-Thailand,None,69428524,,World Bank,Country.Region
-Timor-Leste,None,1267972,,World Bank,Country.Region
-Togo,None,7889094,,World Bank,Country.Region
-Tonga,None,103197,,World Bank,Country.Region
-Trinidad and Tobago,None,1389858,,World Bank,Country.Region
-Tunisia,None,11565204,,World Bank,Country.Region
-Turkey,None,82319724,,World Bank,Country.Region
-Turkmenistan,None,5850908,,World Bank,Country.Region
-Turks and Caicos Islands,None,37665,,World Bank,Country.Region
-Tuvalu,None,11508,,World Bank,Country.Region
-Uganda,None,42723139,,World Bank,Country.Region
-Ukraine,None,44622516,,World Bank,Country.Region
-United Arab Emirates,None,9630959,,World Bank,Country.Region
-United Kingdom,None,66488991,,World Bank,Country.Region
-UK,None,66488991,,World Bank,Country.Region
-US,None,327167434,,World Bank,Country.Region
-Upper middle income,None,2655635719,,World Bank,Country.Region
-Uruguay,None,3449299,,World Bank,Country.Region
-Venezuela,None,31980000,,World Bank,Country.Region
+Afghanistan,None,37172386,56.937760009803,World Bank,Country.Region
+Albania,None,2866376,104.612262773723,World Bank,Country.Region
+Algeria,None,42228429,17.7300750711665,World Bank,Country.Region
+American Samoa,None,55465,277.325,World Bank,Country.Region
+Andorra,None,77006,163.842553191489,World Bank,Country.Region
+Angola,None,30809762,24.7130520574316,World Bank,Country.Region
+Antigua and Barbuda,None,96286,218.831818181818,World Bank,Country.Region
+Arab World,None,419790588,37.3723653654038,World Bank,Country.Region
+Argentina,None,44494502,16.2585100979651,World Bank,Country.Region
+Armenia,None,2951776,103.680224798033,World Bank,Country.Region
+Aruba,None,105845,588.027777777778,World Bank,Country.Region
+Australia,None,24992369,3.24912948744283,World Bank,Country.Region
+Austria,None,8847037,107.206926667578,World Bank,Country.Region
+Azerbaijan,None,9942334,120.265319946776,World Bank,Country.Region
+"Bahamas, The",None,385640,38.5254745254745,World Bank,Country.Region
+Bahrain,None,1569439,2017.27369979138,World Bank,Country.Region
+Bangladesh,None,161356039,1239.57931166936,World Bank,Country.Region
+Barbados,None,286641,666.606976744186,World Bank,Country.Region
+Belarus,None,9485386,46.7287999040892,World Bank,Country.Region
+Belgium,None,11422068,377.214927344782,World Bank,Country.Region
+Belize,None,383071,16.7939938623411,World Bank,Country.Region
+Benin,None,11485048,101.853919829727,World Bank,Country.Region
+Bermuda,None,63968,1184.59257167194,World Bank,Country.Region
+Bhutan,None,754394,19.7775277714448,World Bank,Country.Region
+Bolivia,None,11353142,10.4801458506416,World Bank,Country.Region
+Bosnia and Herzegovina,None,3323929,64.92048828125,World Bank,Country.Region
+Botswana,None,2254126,3.97742487604327,World Bank,Country.Region
+Brazil,None,209469333,25.0617162430876,World Bank,Country.Region
+British Virgin Islands,None,29802,198.68,World Bank,Country.Region
+Brunei Darussalam,None,428962,81.3969639468691,World Bank,Country.Region
+Brunei,None,428962,#N/A,World Bank,Country.Region
+Bulgaria,None,7024216,64.7035372144436,World Bank,Country.Region
+Burkina Faso,None,19751535,72.1912828947368,World Bank,Country.Region
+Burundi,None,11175378,435.178271028037,World Bank,Country.Region
+Cabo Verde,None,543767,134.929776674938,World Bank,Country.Region
+Cambodia,None,16249798,92.0564128710628,World Bank,Country.Region
+Cameroon,None,25216237,53.3439889149796,World Bank,Country.Region
+Canada,None,37058856,4.07530821431988,World Bank,Country.Region
+Caribbean small states,None,7358965,18.1770161788317,World Bank,Country.Region
+Cayman Islands,None,64174,267.391666666667,World Bank,Country.Region
+Central African Republic,None,4666377,7.49041221227006,World Bank,Country.Region
+Central Europe and the Baltics,None,102511922,92.7664366303472,World Bank,Country.Region
+Chad,None,15477751,12.2917336404066,World Bank,Country.Region
+Channel Islands,None,170499,861.106093786457,World Bank,Country.Region
+Chile,None,18729160,25.1894460666519,World Bank,Country.Region
+China,None,1392730000,148.348833270666,World Bank,Country.Region
+Colombia,None,49648685,44.7487021180712,World Bank,Country.Region
+Comoros,None,832322,447.244477540227,World Bank,Country.Region
+"Congo, Dem. Rep.",None,84068091,37.0825923557045,World Bank,Country.Region
+"Congo, Rep.",None,5244363,15.3568462664715,World Bank,Country.Region
+Congo (Kinshasa),None,11860000,#N/A,Google,Country.Region
+Costa Rica,None,4999441,97.9130630630631,World Bank,Country.Region
+Cote d'Ivoire,None,25069229,78.8340534591195,World Bank,Country.Region
+Croatia,None,4089400,73.0771979985704,World Bank,Country.Region
+Cuba,None,11338138,108.999596231494,World Bank,Country.Region
+Curacao,None,159849,360.754504504505,World Bank,Country.Region
+Cyprus,None,1189265,128.708333333333,World Bank,Country.Region
+Czech Republic,None,10625695,137.602887852888,World Bank,Country.Region
+Czechia,None,10625695,#N/A,World Bank,Country.Region
+Denmark,None,5797446,138.067301738509,World Bank,Country.Region
+Djibouti,None,958920,41.3684210526316,World Bank,Country.Region
+Dominica,None,71625,95.5,World Bank,Country.Region
+Dominican Republic,None,10627165,219.97857586421,World Bank,Country.Region
+Early-demographic dividend,None,3249140605,98.13836364042,World Bank,Country.Region
+East Asia & Pacific,None,2328220870,95.4316055341949,World Bank,Country.Region
+East Asia & Pacific (excluding high income),None,2081651801,130.810431457567,World Bank,Country.Region
+East Asia & Pacific (IDA & IBRD countries),None,2056064424,130.185452991291,World Bank,Country.Region
+Ecuador,None,17084357,68.7886817522951,World Bank,Country.Region
+"Egypt, Arab Rep.",None,98423595,98.8734692852479,World Bank,Country.Region
+Egypt,None,98423595,#N/A,World Bank,Country.Region
+El Salvador,None,6420744,309.881467181467,World Bank,Country.Region
+Equatorial Guinea,None,1308974,46.6657397504456,World Bank,Country.Region
+Eritrea,None,3213972,31.8215049504951,World Bank,Country.Region
+Estonia,None,1320884,30.3861053600184,World Bank,Country.Region
+Eswatini,None,1136191,66.0576162790698,World Bank,Country.Region
+Ethiopia,None,109224559,109.224559,World Bank,Country.Region
+Euro area,None,341783171,127.582277673283,World Bank,Country.Region
+Europe & Central Asia,None,918793590,33.4968853034031,World Bank,Country.Region
+Europe & Central Asia (excluding high income),None,417797257,18.4773754089394,World Bank,Country.Region
+Europe & Central Asia (IDA & IBRD countries),None,459865205,20.0172566615243,World Bank,Country.Region
+European Union,None,513213363,121.078194096678,World Bank,Country.Region
+Faroe Islands,None,48497,34.7399698278226,World Bank,Country.Region
+Fiji,None,883483,48.3570333880679,World Bank,Country.Region
+Finland,None,5518050,18.1568556480537,World Bank,Country.Region
+Fragile and conflict affected situations,None,515215936,39.8693125353373,World Bank,Country.Region
+France,None,66987244,122.338395739199,World Bank,Country.Region
+French Guiana,None,290691,#N/A,Google,Country.Region
+French Polynesia,None,277679,75.8685792349727,World Bank,Country.Region
+Gabon,None,2119275,8.22476423332169,World Bank,Country.Region
+"Gambia, The",None,2280102,225.30652173913,World Bank,Country.Region
+Georgia,None,3731000,65.2752020714511,World Bank,Country.Region
+Germany,None,82927922,237.3709697733,World Bank,Country.Region
+Ghana,None,29767108,130.821429199262,World Bank,Country.Region
+Gibraltar,None,33718,3371.8,World Bank,Country.Region
+Great Britain,None,65844142,66488991,OECD,Country.Region
+Greece,None,10727668,83.2247323506594,World Bank,Country.Region
+Greenland,None,56025,0.136496528200755,World Bank,Country.Region
+Grenada,None,111454,327.805882352941,World Bank,Country.Region
+Guam,None,165768,306.977777777778,World Bank,Country.Region
+Guatemala,None,17247807,160.953779395297,World Bank,Country.Region
+Guinea,None,12414318,50.5222122741332,World Bank,Country.Region
+Guinea-Bissau,None,1874309,66.6539473684211,World Bank,Country.Region
+Guyana,None,779004,3.95734823469647,World Bank,Country.Region
+Haiti,None,11123176,403.59854862119,World Bank,Country.Region
+Heavily indebted poor countries (HIPC),None,780234406,44.8957816454125,World Bank,Country.Region
+High income,None,1210312147,34.4377658355898,World Bank,Country.Region
+Holy See,None,1000,#N/A,Google,Country.Region
+Honduras,None,9587522,85.6870319063366,World Bank,Country.Region
+"Hong Kong SAR, China",None,7451000,7096.19047619048,World Bank,Country.Region
+Hungary,None,9768785,107.906605545123,World Bank,Country.Region
+IBRD only,None,4772284113,68.7859051970979,World Bank,Country.Region
+Iceland,None,353574,3.52692269326683,World Bank,Country.Region
+IDA & IBRD total,None,6412522234,68.7084518843392,World Bank,Country.Region
+IDA blend,None,555830605,93.3256218287322,World Bank,Country.Region
+IDA only,None,1084407516,60.2621873819374,World Bank,Country.Region
+IDA total,None,1640238121,68.4840897212872,World Bank,Country.Region
+India,None,1352617328,454.938072575247,World Bank,Country.Region
+Indonesia,None,267663435,147.75219008926,World Bank,Country.Region
+"Iran, Islamic Rep.",None,81800269,50.222420123284,World Bank,Country.Region
+Iran (Islamic Republic of),None,81800269,#N/A,World Bank,Country.Region
+Iran,None,81800269,#N/A,World Bank,Country.Region
+Iraq,None,38433600,88.5305700354617,World Bank,Country.Region
+Ireland,None,4853506,70.452983016403,World Bank,Country.Region
+Isle of Man,None,84077,147.50350877193,World Bank,Country.Region
+Israel,None,8883800,410.526802218115,World Bank,Country.Region
+Italy,None,60431283,205.450747943156,World Bank,Country.Region
+Jamaica,None,2934855,270.993074792244,World Bank,Country.Region
+Japan,None,126529100,347.073458415624,World Bank,Country.Region
+Jordan,None,9956011,112.14249831043,World Bank,Country.Region
+Kazakhstan,None,18276499,6.76982590658221,World Bank,Country.Region
+Kenya,None,51393010,90.2994166637383,World Bank,Country.Region
+Kiribati,None,115847,143.020987654321,World Bank,Country.Region
+"Korea, Dem. People's Rep.",None,25549819,#N/A,World Bank,Country.Region
+"Korea, Rep.",None,51635256,529.652103632681,World Bank,Country.Region
+Republic of Korea,None,51635256,#N/A,World Bank,Country.Region
+Kosovo,None,1845300,168.154679893451,World Bank,Country.Region
+Kuwait,None,4137309,232.172222222222,World Bank,Country.Region
+Kyrgyz Republic,None,6315800,32.9290928050052,World Bank,Country.Region
+Kyrgyzstan,None,6315800,#N/A,World Bank,Country.Region
+Lao PDR,None,7061507,30.5957842287695,World Bank,Country.Region
+Late-demographic dividend,None,2288665963,51.408720555305,World Bank,Country.Region
+Latin America & Caribbean,None,641357515,32.0057333680836,World Bank,Country.Region
+Latin America & Caribbean (excluding high income),None,609013934,32.0214614597141,World Bank,Country.Region
+Latin America & the Caribbean (IDA & IBRD countries),None,625569713,31.4141444422749,World Bank,Country.Region
+Latvia,None,1926542,30.9833065294307,World Bank,Country.Region
+Least developed countries: UN classification,None,1009662578,56.8413289019083,World Bank,Country.Region
+Lebanon,None,6848925,669.494134897361,World Bank,Country.Region
+Lesotho,None,2108132,69.437812911726,World Bank,Country.Region
+Liberia,None,4818977,50.0309073920266,World Bank,Country.Region
+Libya,None,6678567,3.79563238119054,World Bank,Country.Region
+Liechtenstein,None,37910,236.9375,World Bank,Country.Region
+Lithuania,None,2789533,44.5313513780643,World Bank,Country.Region
+Low & middle income,None,6383958209,69.2415960633107,World Bank,Country.Region
+Low income,None,705417321,51.673738313444,World Bank,Country.Region
+Lower middle income,None,3022905169,150.081518176415,World Bank,Country.Region
+Luxembourg,None,607728,250.093827160494,World Bank,Country.Region
+"Macao SAR, China",None,631636,20777.5002607232,World Bank,Country.Region
+Madagascar,None,26262368,45.1398556204881,World Bank,Country.Region
+Malawi,None,18143315,192.440761561307,World Bank,Country.Region
+Malaysia,None,31528585,95.9628214883579,World Bank,Country.Region
+Maldives,None,515696,1718.98666666667,World Bank,Country.Region
+Mali,None,19077690,15.635015858186,World Bank,Country.Region
+Malta,None,483530,1511.03125,World Bank,Country.Region
+Marshall Islands,None,58413,324.516666666667,World Bank,Country.Region
+Mauritania,None,4403319,4.27216357815077,World Bank,Country.Region
+Mauritius,None,1265303,623.30197044335,World Bank,Country.Region
+Mexico,None,126190788,64.9146264050001,World Bank,Country.Region
+"Micronesia, Fed. Sts.",None,112640,160.914285714286,World Bank,Country.Region
+Middle East & North Africa,None,448912859,39.997702909805,World Bank,Country.Region
+Middle East & North Africa (excluding high income),None,382896715,44.3111694561864,World Bank,Country.Region
+Middle East & North Africa (IDA & IBRD countries),None,378327628,43.8129297485221,World Bank,Country.Region
+Middle income,None,5678540888,72.294869980189,World Bank,Country.Region
+Moldova,None,3545883,123.51980353224,World Bank,Country.Region
+Monaco,None,38682,19196,World Bank,Country.Region
+Mongolia,None,3170208,2.04060866654651,World Bank,Country.Region
+Montenegro,None,622345,46.2710037174721,World Bank,Country.Region
+Morocco,None,36029138,80.7285189334528,World Bank,Country.Region
+Mozambique,None,29495962,37.508535313716,World Bank,Country.Region
+Myanmar,None,53708395,82.2386154835549,World Bank,Country.Region
+Namibia,None,2448255,2.97374558175127,World Bank,Country.Region
+Nauru,None,12704,635.2,World Bank,Country.Region
+Nepal,None,28087871,195.939107080572,World Bank,Country.Region
+Netherlands,None,17231017,511.457910359157,World Bank,Country.Region
+New Caledonia,None,284060,15.5393873085339,World Bank,Country.Region
+New Zealand,None,4885500,18.5541756864532,World Bank,Country.Region
+Nicaragua,None,6465513,53.7270483629716,World Bank,Country.Region
+Niger,None,22442948,17.7176505881424,World Bank,Country.Region
+Nigeria,None,195874740,215.064988965381,World Bank,Country.Region
+North America,None,364290258,19.9709762368072,World Bank,Country.Region
+North Macedonia,None,2082958,82.5915146708961,World Bank,Country.Region
+Northern Mariana Islands,None,56882,123.65652173913,World Bank,Country.Region
+Norway,None,5314336,14.5549195374975,World Bank,Country.Region
+OECD members,None,1303529456,37.8092345649061,World Bank,Country.Region
+Oman,None,4829483,15.6041453957997,World Bank,Country.Region
+Other small states,None,30758989,15.1386164116647,World Bank,Country.Region
+Pacific island small states,None,2457367,38.2767445482866,World Bank,Country.Region
+Pakistan,None,212215030,275.289318700706,World Bank,Country.Region
+Palau,None,17907,38.9282608695652,World Bank,Country.Region
+Panama,None,4176873,56.1860774818402,World Bank,Country.Region
+Papua New Guinea,None,8606316,19.0043633794109,World Bank,Country.Region
+Paraguay,None,6956071,17.5083589227284,World Bank,Country.Region
+Peru,None,31989256,24.99160625,World Bank,Country.Region
+Philippines,None,106651922,357.688305329175,World Bank,Country.Region
+Poland,None,37978548,124.035886214442,World Bank,Country.Region
+Portugal,None,10281762,112.23945350807,World Bank,Country.Region
+Post-demographic dividend,None,1109997273,35.2674889372306,World Bank,Country.Region
+Pre-demographic dividend,None,919485393,51.6874400219725,World Bank,Country.Region
+Puerto Rico,None,3195153,360.220180383315,World Bank,Country.Region
+Qatar,None,2781677,239.593195521103,World Bank,Country.Region
+Romania,None,19473936,84.6398470097357,World Bank,Country.Region
+Russia,None,146804372,8.82207955488442,OECD,Country.Region
+Russian Federation,None,144478050,8.82207955488442,World Bank,Country.Region
+Rwanda,None,12301939,498.659870287799,World Bank,Country.Region
+Saint Kitts and Nevis,None,55345,#N/A,World Bank,Country.Region
+Saint Lucia,None,178844,#N/A,World Bank,Country.Region
+Saint Vincent and the Grenadines,None,109897,#N/A,World Bank,Country.Region
+Samoa,None,196130,69.3038869257951,World Bank,Country.Region
+San Marino,None,33785,563.083333333333,World Bank,Country.Region
+Sao Tome and Principe,None,211028,219.820833333333,World Bank,Country.Region
+Saudi Arabia,None,33699947,15.6766543082956,World Bank,Country.Region
+Senegal,None,15854360,82.3474783150678,World Bank,Country.Region
+Serbia,None,6982084,79.8317402241024,World Bank,Country.Region
+Seychelles,None,96762,210.352173913043,World Bank,Country.Region
+Sierra Leone,None,7650154,105.987170961485,World Bank,Country.Region
+Singapore,None,5638676,7952.9984184018,World Bank,Country.Region
+Sint Maarten (Dutch part),None,40654,1193.35294117647,World Bank,Country.Region
+Slovak Republic,None,5447011,113.290578202995,World Bank,Country.Region
+Slovakia,None,5435343,#N/A,OECD,Country.Region
+Slovenia,None,2067372,102.639859503382,World Bank,Country.Region
+Small states,None,40575321,16.2244628233256,World Bank,Country.Region
+Solomon Islands,None,652858,23.324687388353,World Bank,Country.Region
+Somalia,None,15008154,23.9234769024771,World Bank,Country.Region
+South Africa,None,57779622,47.6301197767684,World Bank,Country.Region
+South Asia,None,1814388744,380.247133746081,World Bank,Country.Region
+South Asia (IDA & IBRD),None,1814388744,380.247133746081,World Bank,Country.Region
+South Korea,None,51446201,#N/A,OECD,Country.Region
+"Korea, South",None,51446201,#N/A,OECD,Country.Region
+South Sudan,None,10975920,#N/A,World Bank,Country.Region
+Spain,None,46723749,93.5290582615872,World Bank,Country.Region
+Sri Lanka,None,21670000,345.558922022006,World Bank,Country.Region
+St. Kitts and Nevis,None,52441,201.696153846154,World Bank,Country.Region
+St. Lucia,None,181889,298.17868852459,World Bank,Country.Region
+St. Martin (French part),None,37264,672.058823529412,World Bank,Country.Region
+St. Vincent and the Grenadines,None,110210,282.589743589744,World Bank,Country.Region
+Sub-Saharan Africa,None,1078306520,50.7620843086558,World Bank,Country.Region
+Sub-Saharan Africa (excluding high income),None,1078209758,50.7586283354254,World Bank,Country.Region
+Sub-Saharan Africa (IDA & IBRD countries),None,1078306520,50.7620843086558,World Bank,Country.Region
+Sudan,None,41801533,35.766088580168,World Bank,Country.Region
+Suriname,None,575991,3.69225,World Bank,Country.Region
+Sweden,None,10183175,25.0010434312931,World Bank,Country.Region
+Switzerland,None,8516543,215.521378417094,World Bank,Country.Region
+Syrian Arab Republic,None,16906283,92.0671077710614,World Bank,Country.Region
+Syria,None,16906283,#N/A,World Bank,Country.Region
+Tajikistan,None,9100837,65.5727141724908,World Bank,Country.Region
+Taiwan*,None,23780000,#N/A,Google,Country.Region
+Taiwan,None,23780000,#N/A,Google,Country.Region
+Tanzania,None,56318348,63.5790787988259,World Bank,Country.Region
+Thailand,None,69428524,135.897206835131,World Bank,Country.Region
+Timor-Leste,None,1267972,85.270477471419,World Bank,Country.Region
+Togo,None,7889094,145.046773303916,World Bank,Country.Region
+Tonga,None,103197,143.329166666667,World Bank,Country.Region
+Trinidad and Tobago,None,1389858,270.927485380117,World Bank,Country.Region
+Tunisia,None,11565204,74.4413233779609,World Bank,Country.Region
+Turkey,None,82319724,106.960128893104,World Bank,Country.Region
+Turkmenistan,None,5850908,12.4505947694337,World Bank,Country.Region
+Turks and Caicos Islands,None,37665,39.6473684210526,World Bank,Country.Region
+Tuvalu,None,11508,383.6,World Bank,Country.Region
+Uganda,None,42723139,213.061734490325,World Bank,Country.Region
+Ukraine,None,44622516,77.0296673514129,World Bank,Country.Region
+United Arab Emirates,None,9630959,135.609110109828,World Bank,Country.Region
+United Kingdom,None,66488991,274.82739222089,World Bank,Country.Region
+UK,None,66488991,#N/A,World Bank,Country.Region
+US,None,327167434,35.766088580168,World Bank,Country.Region
+Upper middle income,None,2655635719,45.4691766291018,World Bank,Country.Region
+Uruguay,None,3449299,19.7080276539824,World Bank,Country.Region
+Venezuela,None,31980000,#N/A,World Bank,Country.Region
 US,California,39512223,253.5206882,US Census Bureau,Province.State
 US,Texas,28995881,110.9834667,US Census Bureau,Province.State
 US,Florida,21477737,400.3464277,US Census Bureau,Province.State

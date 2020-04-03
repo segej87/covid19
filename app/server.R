@@ -52,6 +52,12 @@ server <- function(input, output, session) {
     input$total_limit
   })
   
+  table_level <- reactive({
+    req(input$table_level)
+    
+    input$table_level
+  })
+  
   # UI observations
   observe({
     countries <- input$countries
@@ -170,11 +176,38 @@ server <- function(input, output, session) {
     input$log_transform_y
   })
   
-  table_level <- reactive({
-    req(input$table_level)
+  agg_level <- reactive({
+    req(input$agg_level)
     
-    input$table_level
+    input$agg_level
   })
+
+  observe({
+    x <- input$agg_level
+    
+    if (x == 'Country/Region') {
+      var_options = names(country_grouped)
+    } else {
+      var_options = names(state_prov_grouped)
+    }
+    
+    updatePickerInput(
+      session = session,
+      inputId = 'x_axis',
+      choices = var_options,
+      selected = 'Confirmed'
+    )
+    
+    updatePickerInput(
+      session = session,
+      inputId = 'y_axis',
+      choices = var_options,
+      selected = 'Deaths'
+    )
+  })
+
+  
+# Outputs -----------------------------------------------------------------
   
   output$data_update <- renderUI({
     connection_string <- ifelse(connected,
@@ -229,6 +262,7 @@ server <- function(input, output, session) {
         x_axis = x_axis(),
         y_axis = y_axis(),
         colour = colour(),
+        agg_level = agg_level(),
         log_transform_x = log_transform_x(),
         log_transform_y = log_transform_y()
       )

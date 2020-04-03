@@ -1,11 +1,33 @@
 library(WDI)
 library(lubridate)
+library(DT)
+library(dplyr)
 
-datasets <- WDIsearch()
+datasets <- datatable(WDIsearch())
 
-dataset_names <- datasets[,2]
+ppp_dat <- WDI(indicator = 'NY.GDP.PCAP.PP.CD', start = 2000, end = year(Sys.Date()))
 
-pop_datasets <- dataset_names[which(grepl('[Ii]nd', dataset_names))]
+country_gdp <- ppp_dat %>%
+  rename(GDP.PPP = `NY.GDP.PCAP.PP.CD`) %>%
+  group_by(country) %>%
+  filter(!is.na(GDP.PPP)) %>%
+  filter(year == max(year, na.rm = TRUE)) %>%
+  group_by(country, year) %>%
+  summarise(GDP.PPP = max(GDP.PPP, na.rm = TRUE))
+
+write.csv(country_gdp, '../data/wb_gdp_percap_ppp.csv')
+
+dens_dat <- WDI(indicator = 'EN.POP.DNST', start = 2000, end = year(Sys.Date()))
+
+country_density <- dens_dat %>%
+  rename(density = `EN.POP.DNST`) %>%
+  group_by(country) %>%
+  filter(!is.na(density)) %>%
+  filter(year == max(year, na.rm = TRUE)) %>%
+  group_by(country, year) %>%
+  summarise(density = max(density, na.rm = TRUE))
+
+write.csv(country_density, '../data/wb_dens.csv')
 
 urb_dat <- WDI(indicator = 'SP.URB.TOTL.IN.ZS', start = 2000, end = year(Sys.Date()))
 

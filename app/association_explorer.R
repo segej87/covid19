@@ -1,17 +1,21 @@
-plot_associations <- function(chart_type, x_axis, y_axis, colour, log_transform_x = FALSE, log_transform_y = FALSE) {
-  plot_dat <- state_prov_grouped
+plot_associations <- function(chart_type, x_axis, y_axis, colour, agg_level = 'Country/Region', log_transform_x = FALSE, log_transform_y = FALSE) {
+  if (agg_level == 'Country/Region') {
+    plot_dat <- country_grouped %>% as.data.frame()
+  } else {
+    plot_dat <- state_prov_grouped %>% as.data.frame()
+  }
   
-  if (is.factor(plot_dat[, x_axis]) | x_axis %in% c('Population', 'Density', 'First100Date') | grepl('accel|rate', x_axis) | grepl('accel_rate', y_axis)) {
+  if (is.factor(plot_dat[, x_axis]) |
+      x_axis %in% c('Population', 'Density', 'First100Date', 'GDP.PPP') |
+      grepl('accel|rate', x_axis) | 
+      grepl('accel_rate', y_axis)) {
     plot_dat <- plot_dat %>%
       filter(Date == max(Date))
   }
   
   x_title <- str_to_title(gsub('[^[:alnum:]]', ' ', x_axis))
   y_title <- str_to_title(gsub('[^[:alnum:]]', ' ', y_axis))
-  legend.position = 'right'
-  
-  if (is.numeric(plot_dat[, x_axis]) & log_transform_x) plot_dat[, x_axis] <- log(plot_dat[, x_axis])
-  if (is.numeric(plot_dat[, y_axis]) & log_transform_y) plot_dat[, y_axis] <- log(plot_dat[, y_axis])
+  legend.position = 'none'
   
   # Plot the data
   g <- ggplot(data = plot_dat,
@@ -21,6 +25,9 @@ plot_associations <- function(chart_type, x_axis, y_axis, colour, log_transform_
          x = x_title,
          y = y_title) +
     if (chart_type == 'Point') geom_point() else if (chart_type == 'Line') geom_line() else if (chart_type == 'Bar') geom_bar(stat = 'identity')
+  
+  if (is.numeric(plot_dat[, x_axis]) & log_transform_x) g <- g + scale_x_continuous(trans = 'log2')
+  if (is.numeric(plot_dat[, y_axis]) & log_transform_y) g <- g + scale_y_continuous(trans = 'log2') 
   
   g <- g +
     theme(panel.background = element_rect(fill = '#2b3e50'),

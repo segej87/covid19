@@ -181,10 +181,12 @@ load_data <- function() {
 abbrevs <- read.csv('data/state_abbrevs.csv', stringsAsFactors = F)
 abbrev_pattern <- paste0(abbrevs$Code, collapse = '|')
 
-testing <- read.csv(urltesting) %>%
-  left_join(abbrevs, by = c('state' = 'Code')) %>%
-  mutate(Date = as.Date(as.character(date), format = '%Y%m%d') - days(1)) %>%
-  as_tibble()
+testing <- suppressWarnings(
+  read.csv(urltesting) %>%
+    left_join(abbrevs, by = c('state' = 'Code')) %>%
+    mutate(Date = as.Date(as.character(date), format = '%Y%m%d') - days(1)) %>%
+    as_tibble()
+)
 
 assign(
   'dat',
@@ -231,14 +233,16 @@ assign(
 
 assign(
   'dat_summ',
-  dat %>%
-    group_by(Date, Country.Region, Province.State) %>%
-    summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
-              Deaths = sum(Deaths, na.rm = TRUE),
-              Recovered = sum(Recovered, na.rm = TRUE)) %>%
-    arrange(Country.Region, Province.State) %>%
-    left_join(populations, by = c('Country.Region', 'Province.State')) %>%
-    rename(StatePopulation = Population),
+  suppressWarnings(
+    dat %>%
+      group_by(Date, Country.Region, Province.State) %>%
+      summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
+                Deaths = sum(Deaths, na.rm = TRUE),
+                Recovered = sum(Recovered, na.rm = TRUE)) %>%
+      arrange(Country.Region, Province.State) %>%
+      left_join(populations, by = c('Country.Region', 'Province.State')) %>%
+      rename(StatePopulation = Population)
+    ),
   envir = .GlobalEnv
 )
 
@@ -276,13 +280,9 @@ assign(
 )
 
 assign(
-  'state_populations',
-  read.csv('data/state_pops.csv', stringsAsFactors = FALSE) %>%
-    mutate(Province.State = ifelse(is.na(Province.State) | Province.State == 'None',
-                                   as.character(Country.Region),
-                                   as.character(Province.State))) %>%
-    mutate(Country.Region = factor(Country.Region),
-           Province.State = factor(Province.State)),
+  'country_gdp',
+  read.csv('data/wb_gdp_percap_ppp.csv', stringsAsFactors = FALSE) %>%
+    mutate(country = factor(country)),
   envir = .GlobalEnv
 )
 
@@ -291,29 +291,62 @@ assign(
 
 assign(
   'state_prov_grouped',
-  dat_summ %>%
-    group_by(Date, Country.Region, Province.State) %>%
-    summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
-              Deaths = sum(Deaths, na.rm = TRUE),
-              Recovered = sum(Recovered, na.rm = TRUE)) %>%
-    group_by(Country.Region, Province.State) %>%
-    mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
-           Deaths_rate = Deaths - lag(Deaths, default = 0),
-           Recovered_rate = Recovered - lag(Recovered, default = 0),
-           Confirmed_accel = (2 * Confirmed_rate - lag(Confirmed_rate, default = 0) - lag(Confirmed_rate, n = 2, default = 0))/2,
-           Deaths_accel = (2 * Deaths_rate - lag(Deaths_rate, default = 0) - lag(Deaths_rate, n = 2, default = 0))/2,
-           Recovered_accel = (2 * Recovered_rate - lag(Recovered_rate, default = 0) - lag(Recovered_rate, n = 2, default = 0))/2) %>%
-    left_join(dat_summ %>%
-                group_by(Date, Country.Region, Province.State) %>%
-                summarise(Confirmed = sum(Confirmed, na.rm = TRUE)) %>%
-                filter(Confirmed >= 100) %>%
-                group_by(Country.Region, Province.State) %>%
-                summarise(First100Date = min(Date, na.rm = TRUE)),
-              by = c('Country.Region', 'Province.State')) %>%
-    left_join(populations, by = c('Country.Region', 'Province.State')) %>%
-    left_join(testing, by = c('Province.State' = 'Province.State', 'Date' = 'Date')) %>%
-    mutate(normalized_date = as.numeric(difftime(Date, First100Date, unit = 'days')),
-           date_lag = difftime(Date, lag(Date), units = 'days')),
+  suppressWarnings(
+    dat_summ %>%
+      group_by(Date, Country.Region, Province.State) %>%
+      summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
+                Deaths = sum(Deaths, na.rm = TRUE),
+                Recovered = sum(Recovered, na.rm = TRUE)) %>%
+      group_by(Country.Region, Province.State) %>%
+      mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
+             Deaths_rate = Deaths - lag(Deaths, default = 0),
+             Recovered_rate = Recovered - lag(Recovered, default = 0),
+             Confirmed_accel = (2 * Confirmed_rate - lag(Confirmed_rate, default = 0) - lag(Confirmed_rate, n = 2, default = 0))/2,
+             Deaths_accel = (2 * Deaths_rate - lag(Deaths_rate, default = 0) - lag(Deaths_rate, n = 2, default = 0))/2,
+             Recovered_accel = (2 * Recovered_rate - lag(Recovered_rate, default = 0) - lag(Recovered_rate, n = 2, default = 0))/2) %>%
+      left_join(dat_summ %>%
+                  group_by(Date, Country.Region, Province.State) %>%
+                  summarise(Confirmed = sum(Confirmed, na.rm = TRUE)) %>%
+                  filter(Confirmed >= 100) %>%
+                  group_by(Country.Region, Province.State) %>%
+                  summarise(First100Date = min(Date, na.rm = TRUE)),
+                by = c('Country.Region', 'Province.State')) %>%
+      left_join(populations, by = c('Country.Region', 'Province.State')) %>%
+      left_join(testing, by = c('Province.State' = 'Province.State', 'Date' = 'Date')) %>%
+      mutate(normalized_date = as.numeric(difftime(Date, First100Date, unit = 'days')),
+             date_lag = difftime(Date, lag(Date), units = 'days'))
+  ),
+  envir = .GlobalEnv
+)
+
+assign(
+  'country_grouped',
+  suppressWarnings(
+    dat_summ %>%
+      group_by(Date, Country.Region) %>%
+      summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
+                Deaths = sum(Deaths, na.rm = TRUE),
+                Recovered = sum(Recovered, na.rm = TRUE)) %>%
+      group_by(Country.Region) %>%
+      mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
+             Deaths_rate = Deaths - lag(Deaths, default = 0),
+             Recovered_rate = Recovered - lag(Recovered, default = 0),
+             Confirmed_accel = (2 * Confirmed_rate - lag(Confirmed_rate, default = 0) - lag(Confirmed_rate, n = 2, default = 0))/2,
+             Deaths_accel = (2 * Deaths_rate - lag(Deaths_rate, default = 0) - lag(Deaths_rate, n = 2, default = 0))/2,
+             Recovered_accel = (2 * Recovered_rate - lag(Recovered_rate, default = 0) - lag(Recovered_rate, n = 2, default = 0))/2) %>%
+      left_join(dat_summ %>%
+                  group_by(Date, Country.Region) %>%
+                  summarise(Confirmed = sum(Confirmed, na.rm = TRUE)) %>%
+                  filter(Confirmed >= 100) %>%
+                  group_by(Country.Region) %>%
+                  summarise(First100Date = min(Date, na.rm = TRUE)),
+                by = c('Country.Region')) %>%
+      left_join(country_populations, by = c('Country.Region')) %>%
+      rename(Population = CountryPopulation) %>%
+      left_join(country_gdp, by = c('Country.Region' = 'country')) %>%
+      mutate(normalized_date = as.numeric(difftime(Date, First100Date, unit = 'days')),
+             date_lag = difftime(Date, lag(Date), units = 'days'))
+  ),
   envir = .GlobalEnv
 )
 

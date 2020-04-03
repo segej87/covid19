@@ -242,6 +242,13 @@ ui <- navbarPage(
     sidebarLayout(
       sidebarPanel(
         pickerInput(
+          inputId = 'agg_level',
+          label = 'Aggregation Level',
+          choices = c('Country/Region', 'State/Province'),
+          selected = 'Country/Region'
+        ),
+        
+        pickerInput(
           inputId = 'chart_type',
           label = 'Chart Type',
           choices = c('Point', 'Line', 'Bar'),
@@ -252,14 +259,14 @@ ui <- navbarPage(
           inputId = 'x_axis',
           label = 'x Axis',
           choices = names(state_prov_grouped),
-          selected = c('Confirmed')
+          selected = 'Confirmed'
         ),
         
         pickerInput(
           inputId = 'y_axis',
           label = 'y Axis',
           choices = names(state_prov_grouped),
-          selected = c('Deaths')
+          selected = 'Deaths'
         ),
         
         pickerInput(
