@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y \
     gdebi-core \
     pandoc \
     pandoc-citeproc \
+    cron \
     libcurl4-gnutls-dev \
     libcairo2-dev/unstable \
     libxt-dev \
@@ -40,5 +41,9 @@ EXPOSE 80
 # Copy further configuration files into the Docker image
 COPY shiny-server.sh /usr/bin/shiny-server.sh
 RUN chmod 777 /usr/bin/shiny-server.sh
+
+# Kick off a cron job to get new data
+RUN service cron start
+RUN crontab /srv/shiny-server/crontab.txt
 
 CMD ["/usr/bin/shiny-server.sh"]

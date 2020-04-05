@@ -8,7 +8,7 @@ for (p in packages) library(p, character.only = TRUE, quietly = TRUE, verbose = 
 
 source('load_data.R')
 
-ui <- navbarPage(
+  ui <- navbarPage(
   useShinyjs(),
   title = 'COVID-19 Summary Report',
   fluid = TRUE,
@@ -244,7 +244,7 @@ ui <- navbarPage(
         pickerInput(
           inputId = 'agg_level',
           label = 'Aggregation Level',
-          choices = c('Country/Region', 'State/Province'),
+          choices = c('Country/Region', 'State/Province', 'Local'),
           selected = 'Country/Region'
         ),
         
@@ -258,21 +258,21 @@ ui <- navbarPage(
         pickerInput(
           inputId = 'x_axis',
           label = 'x Axis',
-          choices = names(state_prov_grouped),
+          choices = names(country_grouped),
           selected = 'Confirmed'
         ),
         
         pickerInput(
           inputId = 'y_axis',
           label = 'y Axis',
-          choices = names(state_prov_grouped),
+          choices = names(country_grouped),
           selected = 'Deaths'
         ),
         
         pickerInput(
           inputId = 'colour',
           label = 'Color',
-          choices = names(state_prov_grouped),
+          choices = names(country_grouped),
           selected = 'Country.Region'
         ),
         

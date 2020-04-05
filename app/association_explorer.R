@@ -1,12 +1,16 @@
 plot_associations <- function(chart_type, x_axis, y_axis, colour, agg_level = 'Country/Region', log_transform_x = FALSE, log_transform_y = FALSE) {
   if (agg_level == 'Country/Region') {
     plot_dat <- country_grouped %>% as.data.frame()
-  } else {
+  } else if (agg_level == 'State/Province') {
     plot_dat <- state_prov_grouped %>% as.data.frame()
+  } else {
+    plot_dat <- local_grouped %>% as.data.table()
+    plot_dat <- plot_dat[!(is.na(Admin2)) & Admin2 != 'Unassigned']
+    plot_dat <- plot_dat %>% as.data.frame()
   }
   
   if (is.factor(plot_dat[, x_axis]) |
-      x_axis %in% c('Population', 'Density', 'First100Date', 'GDP.PPP') |
+      x_axis %in% c('Population', 'Density', 'First100Date', 'GDP.PPP', 'Transit.Utilization') |
       grepl('accel|rate', x_axis) | 
       grepl('accel_rate', y_axis)) {
     plot_dat <- plot_dat %>%

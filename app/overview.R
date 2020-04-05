@@ -397,15 +397,7 @@ top_10_table <- function(table_level = 'Countries') {
       rename(Last.Updated = Date) %>%
       select(Country.Region, Province.State, Last.Updated, Confirmed_rate, Deaths_rate, Recovered_rate, Confirmed, Deaths, Recovered)
   } else {
-    plot_dat <- dat %>%
-      group_by(Date, Country.Region, Province.State, Admin2) %>%
-      summarise(Confirmed = sum(Confirmed, na.rm = TRUE),
-                Deaths = sum(Deaths, na.rm = TRUE),
-                Recovered = sum(Recovered, na.rm = TRUE)) %>%
-      group_by(Country.Region, Province.State, Admin2) %>%
-      mutate(Confirmed_rate = Confirmed - lag(Confirmed, default = 0),
-             Deaths_rate = Deaths - lag(Deaths, default = 0),
-             Recovered_rate = Recovered - lag(Recovered, default = 0)) %>%
+    plot_dat <- local_grouped %>%
       filter(Date == max(Date)) %>%
       arrange(desc(Date), desc(Confirmed_rate)) %>%
       rename(Last.Updated = Date) %>%

@@ -1,0 +1,2 @@
+5 0 * * * Rscript /srv/shiny-server/get_data.R > /var/log/cron.log 2>&1
+

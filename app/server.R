@@ -187,8 +187,13 @@ server <- function(input, output, session) {
     
     if (x == 'Country/Region') {
       var_options = names(country_grouped)
-    } else {
+      colour_selected = 'Country.Region'
+    } else if (x == 'State/Province') {
       var_options = names(state_prov_grouped)
+      colour_selected = 'Province.State'
+    } else {
+      var_options = names(local_grouped)
+      colour_selected = 'Admin2'
     }
     
     updatePickerInput(
@@ -203,6 +208,13 @@ server <- function(input, output, session) {
       inputId = 'y_axis',
       choices = var_options,
       selected = 'Deaths'
+    )
+    
+    updatePickerInput(
+      session = session,
+      inputId = 'colour',
+      choices = var_options,
+      selected = colour_selected
     )
   })
 
