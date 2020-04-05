@@ -1,32 +1,32 @@
-library(httr)
-library(progress)
-library(curl)
-
-urlfile='https://api.github.com/repos/CSSEGISandData/COVID-19/git/trees/master?recursive=1'
-
-urltesting <- 'http://covidtracking.com/api/states/daily.csv'
-
-github_token <- function() {
-  token <- Sys.getenv('GITHUB_TOKEN')
+  library(httr)
+  library(progress)
+  library(curl)
   
-  if (identical(token, '')) {
-    warning('No oAuth token found, going unauthenticated\n')
+  urlfile='https://api.github.com/repos/CSSEGISandData/COVID-19/git/trees/master?recursive=1'
+  
+  urltesting <- 'http://covidtracking.com/api/states/daily.csv'
+  
+  github_token <- function() {
+    token <- Sys.getenv('GITHUB_TOKEN')
+    
+    if (identical(token, '')) {
+      warning('No oAuth token found, going unauthenticated\n')
+    }
+    
+    return(token)
   }
   
-  return(token)
-}
-
-load_data <- function() {
-  files <- list.files('data', pattern = '.RData')
-  files_as_dates <- as.Date(gsub('.Rdata', '', files), format = '%m-%d-%Y')
-  
-  assign('max_data_date', max(files_as_dates, na.rm = TRUE), envir = .GlobalEnv)
-  assign('connected', TRUE, envir = .GlobalEnv)
-  
-  load(file.path('data', files[which(files_as_dates == max(files_as_dates, na.rm = TRUE))]))
-  
-  return(dat)
-}
+  load_data <- function() {
+    files <- list.files('data', pattern = '.RData')
+    files_as_dates <- as.Date(gsub('.Rdata', '', files), format = '%m-%d-%Y')
+    
+    assign('max_data_date', max(files_as_dates, na.rm = TRUE), envir = .GlobalEnv)
+    assign('connected', TRUE, envir = .GlobalEnv)
+    
+    load(file.path('data', files[which(files_as_dates == max(files_as_dates, na.rm = TRUE))]))
+    
+    return(dat)
+  }
 
 abbrevs <- read.csv('data/state_abbrevs.csv', stringsAsFactors = F)
 abbrev_pattern <- paste0(abbrevs$Code, collapse = '|')

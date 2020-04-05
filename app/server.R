@@ -7,7 +7,7 @@ server <- function(input, output, session) {
     {
       var_list <- list(
         countries = input$countries,
-          state_province =input$state_province,
+        state_province =input$state_province,
         metric = input$metric,
         break_out_states = input$break_out_states,
         show_lockdowns = input$show_lockdowns,
@@ -111,6 +111,14 @@ server <- function(input, output, session) {
     }
   })
   
+  country_list <- reactiveValues()
+  
+  observe({
+    x <- input$state_province
+    
+    country_list$current_countries <- isolate(input$countries)
+  })
+  
   observe({
     x <- input$countries
     
@@ -135,10 +143,17 @@ server <- function(input, output, session) {
     
     state_prov <- state_prov_list[x]
     
+    # Keep selected states when checking break_out_states and adding countries
+    current_states <- isolate(input$state_province)
+    still_there <- intersect(current_states, unlist(state_prov))
+    new_countries <- isolate(input$countries)[which(!(isolate(input$countries) %in% isolate(country_list$current_countries)))]
+    if (length(new_countries) > 0) still_there <- append(still_there, unlist(state_prov_list[new_countries]))
+    if (length(still_there) == 0) selected <- unlist(state_prov) else selected <- still_there
+    
     # Can also set the label and select items
     updatePickerInput(session, 'state_province',
                       choices = state_prov,
-                      selected = unlist(state_prov)
+                      selected = selected
     )
   })
   
