@@ -8,7 +8,7 @@ for (p in packages) library(p, character.only = TRUE, quietly = TRUE, verbose = 
 
 source('load_data.R')
 
-  ui <- navbarPage(
+ui <- navbarPage(
   useShinyjs(),
   title = 'COVID-19 Summary Report',
   fluid = TRUE,

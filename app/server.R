@@ -2,6 +2,8 @@ source('overview.R')
 source('association_explorer.R')
 
 server <- function(input, output, session) {
+  source('load_data.R')
+  
   plot_vals <- eventReactive(
     input$update,
     {
