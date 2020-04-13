@@ -190,15 +190,15 @@ predicted_totals <- data.frame(Country.Region = countries,
                                Predicted.End = predict_ends)
 
 # Plot the data
-g <- ggplot(data = prediction_curves %>% filter(Country.Region == 'US'),
+g <- ggplot(data = prediction_curves,
             mapping = aes(x = Confirmed, y = Confirmed_rate, colour = Country.Region, fill = Country.Region)) +
   labs(title = 'Case Trajectories',
        subtitle = sprintf('With Fitted Parabolic Models: %s', data_date),
        x = 'Total Cases',
        y = 'Daily New Case Rate') +
   geom_line() +
-  geom_point(data = country_predictions %>% filter(Country.Region == 'US')) +
-  geom_text_repel(data = predicted_totals %>% filter(Country.Region == 'US'), mapping = aes(x = predict_ends,
+  geom_point(data = country_predictions) +
+  geom_text_repel(data = predicted_totals, mapping = aes(x = predict_ends,
                                                          label = paste(Country.Region, sapply(predict_ends, FUN = num_in_km))),
                   y = 1000, hjust = -0.1) +
   theme(panel.background = element_rect(fill = '#2b3e50'),

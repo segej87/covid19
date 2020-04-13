@@ -80,12 +80,12 @@ load_data <- function() {
     unlist(strsplit(paths_with_daily, split = '/'))[ind]
   }
   
-  paths_with_daily <- grep('daily_reports', filelist, value = TRUE)
+  paths_with_daily <- grep('daily_reports[/]', filelist, value = TRUE)
   root_dir <- unique(sapply(paths_with_daily, FUN = get_path_level, ind = 1))
   next_level <- unique(sapply(paths_with_daily, FUN = get_path_level, ind = 2))
   
   # Get all data file names
-  data_files <- filelist[which(grepl(file.path(root_dir, next_level), filelist) &
+  data_files <- filelist[which(grepl(paste0(file.path(root_dir, next_level), '[/]'), filelist) &
                                  !grepl('README|[.]gitignore', filelist) &
                                  grepl('[.]csv', filelist))]
   
